@@ -11,4 +11,4 @@ class SetGoalCommandHandler:
             name=command.name,
             description=command.description,
             due_date=command.due_date)
-        self.registry.append(goal)
+        self.registry.add(goal)

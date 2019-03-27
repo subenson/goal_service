@@ -3,6 +3,7 @@ from datetime import datetime
 
 from application.handler import SetGoalCommandHandler
 from domain.model.message.command import SetGoalCommand
+from infrastructure.adapter.goal_registry import InMemoryGoalRegistry
 
 
 class TestGoal(unittest.TestCase):
@@ -12,7 +13,7 @@ class TestGoal(unittest.TestCase):
     A_GOAL_DUE_DATE = datetime.now()
 
     def setUp(self):
-        self.goal_registry = list()
+        self.goal_registry = InMemoryGoalRegistry()
 
     def test_set_goal_should_add_new_goal_to_the_registry(self):
         # Given
