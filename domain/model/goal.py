@@ -6,7 +6,7 @@ class Entity(metaclass=ABCMeta):
 
     @abstractmethod
     def __init__(self):
-        self._id = uuid.uuid4()
+        self._id = str(uuid.uuid4())
         self._discarded = False
 
     @property
@@ -30,6 +30,4 @@ class Goal(Entity):
 
 class GoalRegistry(metaclass=ABCMeta):
 
-    @abstractmethod
-    def add(self, goal: Goal) -> None:
-        pass
+

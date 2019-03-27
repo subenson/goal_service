@@ -1,4 +1,6 @@
-from domain.model.goal import GoalRegistry, Goal
+from sqlalchemy.orm.session import Session
+from domain.model.goal import Goal
+from domain.port import GoalRegistry
 
 
 class InMemoryGoalRegistry(GoalRegistry):
@@ -11,3 +13,14 @@ class InMemoryGoalRegistry(GoalRegistry):
 
     def __len__(self):
         return len(self._registry)
+
+
+class SqlAlchemyGoalRegistry(GoalRegistry):
+
+    def __init__(self, session: Session):
+        self._session = session
+
+    def add(self, goal: Goal) -> None:
+        print(goal.__dict__)
+        self._session.add(goal)
+        self._session.commit()
