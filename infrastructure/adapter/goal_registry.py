@@ -21,6 +21,8 @@ class SqlAlchemyGoalRegistry(GoalRegistry):
         self._session = session
 
     def add(self, goal: Goal) -> None:
-        print(goal.__dict__)
         self._session.add(goal)
         self._session.commit()
+
+    def __len__(self):
+        return self._session.query(Goal).count()
