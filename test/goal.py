@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 
-from application.handler import SetGoalCommandHandler
+from application.handler.command import SetGoalCommandHandler
 from domain.message.command import SetGoalCommand
 from infrastructure.adapter.goal_registry import InMemoryGoalRegistry
 
