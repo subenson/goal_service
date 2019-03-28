@@ -3,7 +3,7 @@ from domain.model.goal import Goal
 from domain.port import GoalRegistry
 
 
-class InMemoryGoalRegistry(GoalRegistry):
+class InMemoryGoalRepository(GoalRegistry):
 
     def __init__(self):
         self._registry = list()
@@ -15,7 +15,7 @@ class InMemoryGoalRegistry(GoalRegistry):
         return len(self._registry)
 
 
-class SqlAlchemyGoalRegistry(GoalRegistry):
+class SqlAlchemyGoalRepository(GoalRegistry):
 
     def __init__(self, session: Session):
         self._session = session
