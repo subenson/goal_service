@@ -26,3 +26,6 @@ class Goal(Entity):
         self._name = name
         self._description = description
         self._due_date = due_date
+
+    def complete(self):
+        self._completed = True

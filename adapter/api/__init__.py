@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 
 from adapter.orm.goal import SqlAlchemyGoalRepository
-from application.handler.command import SetGoalCommandHandler
+from application.handler.command import SetGoalCommandHandler, \
+    CompleteGoalHandler
 from application.handler.query import ListOpenGoalsQuery
-from domain.message.command import SetGoalCommand
+from domain.message.command import SetGoalCommand, CompleteGoalCommand
 from adapter.config import database
 
 app = Flask('goal')
@@ -16,12 +17,23 @@ def home():
 
 @app.route('/goals', methods=['POST'])
 def set_goal():
-    command = SetGoalCommand(**request.get_json())
-
     session = database.get_session()
     repository = SqlAlchemyGoalRepository(session)
-    handler = SetGoalCommandHandler(repository=repository)
 
+    command = SetGoalCommand(**request.get_json())
+    handler = SetGoalCommandHandler(repository=repository)
+    handler(command)
+
+    return "", 204
+
+
+@app.route('/goals/<id_>/complete', methods=['PUT'])
+def complete_goal(id_):
+    session = database.get_session()
+    repository = SqlAlchemyGoalRepository(session)
+
+    command = CompleteGoalCommand(id=id_)
+    handler = CompleteGoalHandler(repository=repository)
     handler(command)
 
     return "", 204
