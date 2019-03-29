@@ -1,9 +1,9 @@
 import unittest
 from datetime import datetime
 
-from application.handler.command import SetGoalCommandHandler
-from domain.message.command import SetGoalCommand
-from adapter.orm.goal import InMemoryGoalRepository
+from goal_app.application.handler.command import SetGoalCommandHandler
+from goal_app.domain.message.command import SetGoalCommand
+from goal_app.adapter.orm.goal import InMemoryGoalRepository
 
 
 class TestGoal(unittest.TestCase):

@@ -1,6 +1,6 @@
 from sqlalchemy.orm.session import Session
-from domain.model.goal import Goal
-from domain.port import GoalRegistry
+from goal_app.domain.model.goal import Goal
+from goal_app.domain.port import GoalRegistry
 
 
 class InMemoryGoalRepository(GoalRegistry):

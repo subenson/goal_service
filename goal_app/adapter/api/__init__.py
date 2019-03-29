@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 
-from adapter.orm import database
-from adapter.orm.goal import SqlAlchemyGoalRepository
-from application.handler.command import SetGoalCommandHandler, \
+from goal_app.adapter.orm.goal import SqlAlchemyGoalRepository
+from goal_app.adapter.orm import database
+from goal_app.application.handler.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
-from application.handler.query import ListOpenGoalsQuery
-from domain.message.command import SetGoalCommand, CompleteGoalCommand, \
+from goal_app.application.handler.query import ListOpenGoalsQuery
+from goal_app.domain.message.command import SetGoalCommand, CompleteGoalCommand, \
     DiscardGoalCommand
-from domain.model.goal import DiscardedEntityException
+from goal_app.domain.model.goal import DiscardedEntityException
 
 app = Flask('goal')
 

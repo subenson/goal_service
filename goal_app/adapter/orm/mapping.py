@@ -1,7 +1,7 @@
 from sqlalchemy.orm import mapper
 
-from adapter.orm.schema import GOAL_TABLE
-from domain.model.goal import Goal
+from goal_app.adapter.orm.schema import GOAL_TABLE
+from goal_app.domain.model.goal import Goal
 
 
 mapper(Goal, GOAL_TABLE, properties={

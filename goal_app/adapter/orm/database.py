@@ -27,4 +27,4 @@ class SqlAlchemy:
 
 
 database = SqlAlchemy('sqlite:////Users/svendenotter/Code/Python/goal_app'
-                      '/adapter/test.db')
+                      '/goal_app/adapter/test.db')

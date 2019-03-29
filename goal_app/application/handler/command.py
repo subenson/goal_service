@@ -1,6 +1,6 @@
-from domain.message.command import SetGoalCommand, CompleteGoalCommand, \
+from goal_app.domain.message.command import SetGoalCommand, CompleteGoalCommand, \
     DiscardGoalCommand
-from domain.model.goal import Goal
+from goal_app.domain.model.goal import Goal
 
 
 class CommandHandler:
