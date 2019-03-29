@@ -25,7 +25,6 @@ class SqlAlchemyGoalRepository(GoalRegistry):
 
     def add(self, goal: Goal) -> None:
         self._session.add(goal)
-        self._session.commit()
 
     def get(self, id_):
         return self._session.query(Goal).get(id_)
