@@ -23,4 +23,3 @@ class CompleteGoalHandler:
     def __call__(self, command: CompleteGoalCommand):
         goal = self.repository.get(command.id)
         goal.complete()
-        self.repository._session.commit()  # Fix this ASAP.
