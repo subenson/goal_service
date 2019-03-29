@@ -11,3 +11,7 @@ class SetGoalCommand(NamedTuple):
 
 class CompleteGoalCommand(NamedTuple):
     id: uuid.uuid4
+
+
+class DiscardGoalCommand(NamedTuple):
+    id: uuid.uuid4

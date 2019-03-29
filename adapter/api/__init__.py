@@ -3,9 +3,10 @@ from flask import Flask, request, jsonify
 from adapter.orm import database
 from adapter.orm.goal import SqlAlchemyGoalRepository
 from application.handler.command import SetGoalCommandHandler, \
-    CompleteGoalHandler
+    CompleteGoalCommandHandler, DiscardGoalCommandHandler
 from application.handler.query import ListOpenGoalsQuery
-from domain.message.command import SetGoalCommand, CompleteGoalCommand
+from domain.message.command import SetGoalCommand, CompleteGoalCommand, \
+    DiscardGoalCommand
 
 app = Flask('goal')
 
@@ -33,7 +34,19 @@ def complete_goal(id_):
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = CompleteGoalHandler(repository=repository)
+        handler = CompleteGoalCommandHandler(repository=repository)
+        handler(command)
+
+    return "", 204
+
+
+@app.route('/goals/<id_>', methods=['DELETE'])
+def discard_goal(id_):
+    command = DiscardGoalCommand(id=id_)
+
+    with database.unit_of_work() as session:
+        repository = SqlAlchemyGoalRepository(session)
+        handler = DiscardGoalCommandHandler(repository=repository)
         handler(command)
 
     return "", 204

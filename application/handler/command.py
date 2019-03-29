@@ -1,11 +1,15 @@
-from domain.message.command import SetGoalCommand, CompleteGoalCommand
+from domain.message.command import SetGoalCommand, CompleteGoalCommand, \
+    DiscardGoalCommand
 from domain.model.goal import Goal
 
 
-class SetGoalCommandHandler:
+class CommandHandler:
 
     def __init__(self, repository):
         self.repository = repository
+
+
+class SetGoalCommandHandler(CommandHandler):
 
     def __call__(self, command: SetGoalCommand):
         goal = Goal(
@@ -15,11 +19,15 @@ class SetGoalCommandHandler:
         self.repository.add(goal)
 
 
-class CompleteGoalHandler:
-
-    def __init__(self, repository):
-        self.repository = repository
+class CompleteGoalCommandHandler(CommandHandler):
 
     def __call__(self, command: CompleteGoalCommand):
         goal = self.repository.get(command.id)
         goal.complete()
+
+
+class DiscardGoalCommandHandler(CommandHandler):
+
+    def __call__(self, command: DiscardGoalCommand):
+        goal = self.repository.get(command.id)
+        goal.discard()

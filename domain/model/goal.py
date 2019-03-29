@@ -17,6 +17,9 @@ class Entity(metaclass=ABCMeta):
     def discarded(self):
         return self._discarded
 
+    def discard(self):
+        self._discarded = True
+
 
 class Goal(Entity):
 
