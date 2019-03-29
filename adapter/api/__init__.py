@@ -7,13 +7,26 @@ from application.handler.command import SetGoalCommandHandler, \
 from application.handler.query import ListOpenGoalsQuery
 from domain.message.command import SetGoalCommand, CompleteGoalCommand, \
     DiscardGoalCommand
+from domain.model.goal import DiscardedEntityException
 
 app = Flask('goal')
 
 
+def http_ok(body={}, headers=None):
+    return jsonify(body), 200, headers
+
+
+def http_no_content(headers=None):
+    return "", 204, headers
+
+
+def http_conflict(body={}, headers=None):
+    return jsonify(body), 409, headers
+
+
 @app.route('/', methods=['GET'])
 def home():
-    return "Hi", 201
+    return http_ok("Hi")
 
 
 @app.route('/goals', methods=['POST'])
@@ -25,7 +38,7 @@ def set_goal():
         handler = SetGoalCommandHandler(repository=repository)
         handler(command)
 
-    return "", 204
+    return http_no_content()
 
 
 @app.route('/goals/<id_>/complete', methods=['PUT'])
@@ -35,9 +48,12 @@ def complete_goal(id_):
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
         handler = CompleteGoalCommandHandler(repository=repository)
-        handler(command)
 
-    return "", 204
+        try:
+            handler(command)
+            return http_no_content()
+        except DiscardedEntityException as ex:
+            return http_conflict(dict(reason=str(ex)))
 
 
 @app.route('/goals/<id_>', methods=['DELETE'])
@@ -47,14 +63,15 @@ def discard_goal(id_):
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
         handler = DiscardGoalCommandHandler(repository=repository)
-        handler(command)
 
-    return "", 204
+        try:
+            handler(command)
+            return http_no_content()
+        except DiscardedEntityException as ex:
+            return http_conflict(dict(reason=str(ex)))
 
 
 @app.route('/goals', methods=['GET'])
 def list_goals():
-    session = database.session()
-    list_open_goals = ListOpenGoalsQuery(session)
-
-    return jsonify(list_open_goals())
+    list_open_goals = ListOpenGoalsQuery(database.session())
+    return http_ok(list_open_goals())

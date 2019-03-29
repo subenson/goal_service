@@ -1,15 +1,12 @@
-import logging
 from contextlib import contextmanager
 
 from sqlalchemy import Table, create_engine, MetaData, Column, String, \
     DateTime, Boolean
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import scoped_session, sessionmaker, mapper
 from sqlalchemy_utils.functions import create_database
 
 from domain.model.goal import Goal
-
-
-log = logging.getLogger(__name__)
 
 
 class SqlAlchemy:
@@ -51,8 +48,7 @@ class SqlAlchemy:
         try:
             yield session
             session.commit()
-        except Exception as ex:
-            log.debug(ex)
+        except SQLAlchemyError:
             session.rollback()
             session.close()
 
