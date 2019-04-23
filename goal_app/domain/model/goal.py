@@ -45,6 +45,10 @@ class Goal(Entity):
         self._description = description
         self._due_date = due_date
 
+    @property
+    def completed(self):
+        return self._completed
+
     @check_not_discarded
     def complete(self):
         self._completed = True

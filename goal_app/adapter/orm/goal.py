@@ -12,7 +12,10 @@ class InMemoryGoalRepository(GoalRegistry):
         self._registry.append(goal)
 
     def get(self, id_):
-        raise NotImplementedError
+        for goal in self._registry:
+            if goal.id == id_:
+                return goal
+        return None
 
     def __len__(self):
         return len(self._registry)
