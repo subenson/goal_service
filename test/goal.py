@@ -6,7 +6,7 @@ from goal_app.application.handler.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler
 from goal_app.domain.message.command import SetGoalCommand, CompleteGoalCommand
 from goal_app.adapter.orm.goal import InMemoryGoalRepository
-from goal_app.domain.model.goal import Goal
+from goal_app.domain.model.goal import Goal, DiscardedEntityException
 
 
 class TestGoal(unittest.TestCase):
@@ -40,7 +40,7 @@ class TestGoal(unittest.TestCase):
 
     def test_complete_goal_should_flag_goal_as_completed(self):
         # Given
-        original, goal = copy.copy(self.A_GOAL), copy.copy(self.A_GOAL)
+        goal = copy.copy(self.A_GOAL)
         self.repository.add(goal)
         command = CompleteGoalCommand(id=goal.id)
 
@@ -49,5 +49,16 @@ class TestGoal(unittest.TestCase):
         handler(command)
 
         # Then
-        assert original.completed is False
         assert goal.completed is True
+
+    def test_complete_discarded_goal_should_raise_error(self):
+        # Given
+        goal = copy.copy(self.A_GOAL)
+        goal.discard()
+        self.repository.add(goal)
+        command = CompleteGoalCommand(id=goal.id)
+
+        # When
+        with self.assertRaises(DiscardedEntityException):
+            handler = CompleteGoalCommandHandler(repository=self.repository)
+            handler(command)
