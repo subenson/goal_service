@@ -52,7 +52,7 @@ class TestGoal(unittest.TestCase):
         # Then
         assert goal.completed
 
-    def test_complete_discarded_goal_should_raise_error(self):
+    def test_complete_discarded_goal_should_raise_exception(self):
         # Given
         goal = copy.copy(self.A_GOAL)
         goal.discard()
@@ -76,3 +76,15 @@ class TestGoal(unittest.TestCase):
 
         # Then
         assert goal.discarded
+
+    def test_discard_discarded_goal_should_raise_exception(self):
+        # Given
+        goal = copy.copy(self.A_GOAL)
+        goal.discard()
+        self.repository.add(goal)
+        command = DiscardGoalCommand(id=goal.id)
+
+        # When
+        with self.assertRaises(DiscardedEntityException):
+            handler = DiscardGoalCommandHandler(repository=self.repository)
+            handler(command)
