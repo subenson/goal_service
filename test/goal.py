@@ -3,8 +3,9 @@ import unittest
 from datetime import datetime
 
 from goal_app.application.handler.command import SetGoalCommandHandler, \
-    CompleteGoalCommandHandler
-from goal_app.domain.message.command import SetGoalCommand, CompleteGoalCommand
+    CompleteGoalCommandHandler, DiscardGoalCommandHandler
+from goal_app.domain.message.command import SetGoalCommand, \
+    CompleteGoalCommand, DiscardGoalCommand
 from goal_app.adapter.orm.goal import InMemoryGoalRepository
 from goal_app.domain.model.goal import Goal, DiscardedEntityException
 
@@ -49,7 +50,7 @@ class TestGoal(unittest.TestCase):
         handler(command)
 
         # Then
-        assert goal.completed is True
+        assert goal.completed
 
     def test_complete_discarded_goal_should_raise_error(self):
         # Given
@@ -62,3 +63,16 @@ class TestGoal(unittest.TestCase):
         with self.assertRaises(DiscardedEntityException):
             handler = CompleteGoalCommandHandler(repository=self.repository)
             handler(command)
+
+    def test_discard_goal_should_flag_goal_as_discarded(self):
+        # Given
+        goal = copy.copy(self.A_GOAL)
+        self.repository.add(goal)
+        command = DiscardGoalCommand(id=goal.id)
+
+        # When
+        handler = DiscardGoalCommandHandler(repository=self.repository)
+        handler(command)
+
+        # Then
+        assert goal.discarded
