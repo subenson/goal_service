@@ -1,6 +1,6 @@
 from sqlalchemy.orm import mapper
 
-from goal_app.adapter.orm.schema import GOAL_TABLE
+from goal_app.infrastructure.orm.schema import GOAL_TABLE
 from goal_app.domain.model.goal import Goal
 
 
