@@ -1,15 +1,15 @@
 import unittest
 from datetime import datetime
 
-from goal_app.application.handler.command import \
+from goal_app.application.handlers.command import \
     SetProgressionCommandHandler, DiscardProgressionCommandHandler
-from goal_app.domain.message.command import SetProgressionCommand, \
+from goal_app.domain.messages.command import SetProgressionCommand, \
     DiscardProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
 from goal_app.infrastructure.repositories.progression import \
     InMemoryProgressionRepository
-from goal_app.domain.model.goal import Goal
-from goal_app.domain.model.progression import Progression
+from goal_app.domain.models.goal import Goal
+from goal_app.domain.models.progression import Progression
 
 
 class TestGoal(unittest.TestCase):

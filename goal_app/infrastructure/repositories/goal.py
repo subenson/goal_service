@@ -1,5 +1,5 @@
 from sqlalchemy.orm.session import Session
-from goal_app.domain.model.goal import Goal
+from goal_app.domain.models.goal import Goal
 from goal_app.domain.port import Repository
 
 

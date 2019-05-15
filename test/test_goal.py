@@ -1,13 +1,13 @@
 import unittest
 from datetime import datetime
 
-from goal_app.application.handler.command import SetGoalCommandHandler, \
+from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
-from goal_app.domain.message.command import SetGoalCommand, \
+from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
-from goal_app.domain.model.goal import Goal
-from goal_app.domain.model import DiscardedEntityException
+from goal_app.domain.models.goal import Goal
+from goal_app.domain.models import DiscardedEntityException
 
 
 class TestGoal(unittest.TestCase):

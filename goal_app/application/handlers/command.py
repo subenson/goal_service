@@ -1,8 +1,8 @@
-from goal_app.domain.message.command import SetGoalCommand, \
+from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, SetProgressionCommand, \
     DiscardProgressionCommand
-from goal_app.domain.model.goal import Goal
-from goal_app.domain.model.progression import Progression
+from goal_app.domain.models.goal import Goal
+from goal_app.domain.models.progression import Progression
 
 
 class CommandHandler:

@@ -2,14 +2,14 @@ from flask import Flask, request, jsonify
 
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
-from goal_app.application.handler.command import SetGoalCommandHandler, \
+from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
     SetProgressionCommandHandler
-from goal_app.application.handler.query import ListOpenGoalsQuery, \
+from goal_app.application.handlers.query import ListOpenGoalsQuery, \
     ListProgressionsQuery
-from goal_app.domain.message.command import SetGoalCommand, \
+from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, SetProgressionCommand
-from goal_app.domain.model import DiscardedEntityException
+from goal_app.domain.models import DiscardedEntityException
 
 app = Flask('goal')
 

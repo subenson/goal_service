@@ -1,6 +1,6 @@
 from goal_app.infrastructure.orm.database import database
-from goal_app.application.handler.command import SetGoalCommandHandler
-from goal_app.domain.message.command import SetGoalCommand
+from goal_app.application.handlers.command import SetGoalCommandHandler
+from goal_app.domain.messages.command import SetGoalCommand
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 
 

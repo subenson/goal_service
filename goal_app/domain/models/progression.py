@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from goal_app.domain.model import Entity
+from goal_app.domain.models import Entity
 
 
 class Progression(Entity):
