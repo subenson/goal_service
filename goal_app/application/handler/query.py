@@ -11,7 +11,7 @@ class ListOpenGoalsQuery(Query):
         return [dict(r) for r in result.fetchall()]
 
 
-class ListGoalProgressionsQuery(Query):
+class ListProgressionsQuery(Query):
     def __call__(self):
         result = self._session.execute(
             'SELECT id, note, percentage, datetime FROM goal_progression '

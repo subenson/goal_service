@@ -21,7 +21,7 @@ class InMemoryGoalRepository(GoalRegistry):
         return len(self._registry)
 
 
-class InMemoryGoalProgressionRepository(GoalRegistry):
+class InMemoryProgressionRepository(GoalRegistry):
 
     def __init__(self):
         self._registry = list()
@@ -54,7 +54,7 @@ class SqlAlchemyGoalRepository(GoalRegistry):
         return self._session.query(Goal).count()
 
 
-class SqlAlchemyGoalProgressionRepository(GoalRegistry):
+class SqlAlchemyProgressionRepository(GoalRegistry):
 
     def __init__(self, session: Session):
         self._session = session

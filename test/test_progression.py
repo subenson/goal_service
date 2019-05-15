@@ -2,11 +2,11 @@ import unittest
 from datetime import datetime
 
 from goal_app.application.handler.command import \
-    SetGoalProgressionCommandHandler, DiscardGoalProgressionCommandHandler
-from goal_app.domain.message.command import SetGoalProgressionCommand, \
-    DiscardGoalProgressionCommand
+    SetProgressionCommandHandler, DiscardProgressionCommandHandler
+from goal_app.domain.message.command import SetProgressionCommand, \
+    DiscardProgressionCommand
 from goal_app.infrastructure.orm.goal import InMemoryGoalRepository, \
-    InMemoryGoalProgressionRepository
+    InMemoryProgressionRepository
 from goal_app.domain.model.goal import Goal, Progression
 
 
@@ -41,13 +41,13 @@ class TestGoal(unittest.TestCase):
         # Given
         A_GOAL = self.repository._registry[0]
 
-        command = SetGoalProgressionCommand(
+        command = SetProgressionCommand(
             goal_id=A_GOAL.id,
             note=self.A_PROGRESSION_NOTE,
             percentage=self.A_PROGRESSION_PERCENTAGE)
 
         # When
-        handler = SetGoalProgressionCommandHandler(repository=self.repository)
+        handler = SetProgressionCommandHandler(repository=self.repository)
         handler(command)
 
         # Then
@@ -64,13 +64,13 @@ class TestGoal(unittest.TestCase):
         progression._id = self.A_PROGRESSION_ID
         progression._goal_id = self.A_GOAL_ID
 
-        repository = InMemoryGoalProgressionRepository()
+        repository = InMemoryProgressionRepository()
         repository._registry.append(progression)
 
-        command = DiscardGoalProgressionCommand(id=self.A_PROGRESSION_ID)
+        command = DiscardProgressionCommand(id=self.A_PROGRESSION_ID)
 
         # When
-        handler = DiscardGoalProgressionCommandHandler(repository=repository)
+        handler = DiscardProgressionCommandHandler(repository=repository)
         handler(command)
 
         # Then
