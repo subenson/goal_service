@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import uuid
+from datetime import datetime
 
 
 class DiscardedEntityException(Exception):
@@ -44,6 +45,7 @@ class Goal(Entity):
         self._name = name
         self._description = description
         self._due_date = due_date
+        self._progressions = list()
 
     @property
     def completed(self):
@@ -52,3 +54,27 @@ class Goal(Entity):
     @check_not_discarded
     def complete(self):
         self._completed = True
+
+    @property
+    def progressions(self):
+        return self._progressions
+
+    def add_progression(self, progression: "Progression"):
+        self.progressions.append(progression)
+
+
+class Progression(Entity):
+
+    def __init__(self, note, percentage):
+        super().__init__()
+        self._note = note
+        self._percentage = percentage
+        self._datetime = datetime.now()
+
+    @property
+    def note(self):
+        return self._note
+
+    @property
+    def percentage(self):
+        return self._percentage

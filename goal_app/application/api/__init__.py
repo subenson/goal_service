@@ -3,10 +3,12 @@ from flask import Flask, request, jsonify
 from goal_app.infrastructure.orm.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handler.command import SetGoalCommandHandler, \
-    CompleteGoalCommandHandler, DiscardGoalCommandHandler
-from goal_app.application.handler.query import ListOpenGoalsQuery
-from goal_app.domain.message.command import SetGoalCommand, CompleteGoalCommand, \
-    DiscardGoalCommand
+    CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
+    SetGoalProgressionCommandHandler
+from goal_app.application.handler.query import ListOpenGoalsQuery, \
+    ListGoalProgressionsQuery
+from goal_app.domain.message.command import SetGoalCommand, \
+    CompleteGoalCommand, DiscardGoalCommand, SetGoalProgressionCommand
 from goal_app.domain.model.goal import DiscardedEntityException
 
 app = Flask('goal')
@@ -73,5 +75,26 @@ def discard_goal(id_):
 
 @app.route('/goals', methods=['GET'])
 def list_goals():
-    list_open_goals = ListOpenGoalsQuery(database.session())
-    return http_ok(list_open_goals())
+    open_goals = ListOpenGoalsQuery(database.session())
+    return http_ok(open_goals())
+
+
+@app.route('/goals/<goal_id>/progressions', methods=['GET'])
+def list_goal_progressions(goal_id):
+    goal_progressions = ListGoalProgressionsQuery(database.session())
+    return http_ok(goal_progressions())
+
+
+@app.route('/goals/<goal_id>/progressions', methods=['POST'])
+def set_goal_progression(goal_id):
+    progression_json = request.get_json()
+    progression_json['goal_id'] = goal_id
+
+    command = SetGoalProgressionCommand(**progression_json)
+
+    with database.unit_of_work() as session:
+        repository = SqlAlchemyGoalRepository(session)
+        handler = SetGoalProgressionCommandHandler(repository=repository)
+        handler(command)
+
+    return http_no_content()
