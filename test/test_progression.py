@@ -8,7 +8,8 @@ from goal_app.domain.message.command import SetProgressionCommand, \
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
 from goal_app.infrastructure.repositories.progression import \
     InMemoryProgressionRepository
-from goal_app.domain.model.goal import Goal, Progression
+from goal_app.domain.model.goal import Goal
+from goal_app.domain.model.progression import Progression
 
 
 class TestGoal(unittest.TestCase):

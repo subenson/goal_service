@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from goal_app.domain.model.goal import Progression
+from goal_app.domain.model.progression import Progression
 from goal_app.domain.port import Repository
 
 

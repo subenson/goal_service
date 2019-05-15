@@ -9,7 +9,7 @@ from goal_app.application.handler.query import ListOpenGoalsQuery, \
     ListProgressionsQuery
 from goal_app.domain.message.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, SetProgressionCommand
-from goal_app.domain.model.goal import DiscardedEntityException
+from goal_app.domain.model import DiscardedEntityException
 
 app = Flask('goal')
 
