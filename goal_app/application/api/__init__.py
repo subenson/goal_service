@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from goal_app.infrastructure.orm.goal import SqlAlchemyGoalRepository
+from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handler.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \

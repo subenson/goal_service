@@ -1,4 +1,3 @@
-import copy
 import unittest
 from datetime import datetime
 
@@ -6,7 +5,7 @@ from goal_app.application.handler.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
 from goal_app.domain.message.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand
-from goal_app.infrastructure.orm.goal import InMemoryGoalRepository
+from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
 from goal_app.domain.model.goal import Goal, DiscardedEntityException
 
 

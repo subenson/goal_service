@@ -1,10 +1,18 @@
 from abc import ABCMeta, abstractmethod
 
-from goal_app.domain.model.goal import Goal
+from goal_app.domain.model.goal import Entity
 
 
-class GoalRegistry(metaclass=ABCMeta):
+class Repository(metaclass=ABCMeta):
 
     @abstractmethod
-    def add(self, goal: Goal) -> None:
+    def add(self, entity: Entity) -> None:
+        pass
+
+    @abstractmethod
+    def get(self, entity: Entity) -> Entity:
+        pass
+
+    @abstractmethod
+    def __len__(self) -> int:
         pass
