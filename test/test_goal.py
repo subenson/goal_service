@@ -16,11 +16,11 @@ class TestGoal(unittest.TestCase):
     A_GOAL_DESCRIPTION = "7 Habits of Highly Effective People"
     A_GOAL_DUE_DATE = datetime.now()
 
-    A_GOAL = Goal(**{
+    A_GOAL_JSON = {
         "name": A_GOAL_NAME,
         "description": A_GOAL_DESCRIPTION,
         "due_date": A_GOAL_DUE_DATE
-    })
+    }
 
     def setUp(self):
         self.repository = InMemoryGoalRepository()
@@ -41,7 +41,7 @@ class TestGoal(unittest.TestCase):
 
     def test_complete_goal_should_flag_goal_as_completed(self):
         # Given
-        goal = copy.copy(self.A_GOAL)
+        goal = Goal(**self.A_GOAL_JSON)
         self.repository.add(goal)
         command = CompleteGoalCommand(id=goal.id)
 
@@ -54,7 +54,7 @@ class TestGoal(unittest.TestCase):
 
     def test_complete_discarded_goal_should_raise_exception(self):
         # Given
-        goal = copy.copy(self.A_GOAL)
+        goal = Goal(**self.A_GOAL_JSON)
         goal.discard()
         self.repository.add(goal)
         command = CompleteGoalCommand(id=goal.id)
@@ -66,7 +66,7 @@ class TestGoal(unittest.TestCase):
 
     def test_discard_goal_should_flag_goal_as_discarded(self):
         # Given
-        goal = copy.copy(self.A_GOAL)
+        goal = Goal(**self.A_GOAL_JSON)
         self.repository.add(goal)
         command = DiscardGoalCommand(id=goal.id)
 
@@ -79,7 +79,7 @@ class TestGoal(unittest.TestCase):
 
     def test_discard_discarded_goal_should_raise_exception(self):
         # Given
-        goal = copy.copy(self.A_GOAL)
+        goal = Goal(**self.A_GOAL_JSON)
         goal.discard()
         self.repository.add(goal)
         command = DiscardGoalCommand(id=goal.id)
