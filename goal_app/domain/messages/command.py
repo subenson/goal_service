@@ -25,3 +25,9 @@ class SetProgressionCommand(NamedTuple):
 
 class DiscardProgressionCommand(NamedTuple):
     id: uuid.uuid4
+
+
+class EditProgressionCommand(NamedTuple):
+    id: uuid.uuid4
+    note: str
+    percentage: int

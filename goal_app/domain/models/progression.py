@@ -12,9 +12,17 @@ class Progression(Entity):
         self._datetime = datetime.now()
 
     @property
-    def note(self):
+    def note(self) -> str:
         return self._note
 
+    @note.setter
+    def note(self, note: str):
+        self._note = note
+
     @property
-    def percentage(self):
+    def percentage(self) -> int:
         return self._percentage
+
+    @percentage.setter
+    def percentage(self, percentage: int):
+        self._percentage = percentage

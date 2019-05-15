@@ -1,10 +1,10 @@
 import unittest
 from datetime import datetime
 
-from goal_app.application.handlers.command import \
-    SetProgressionCommandHandler, DiscardProgressionCommandHandler
+from goal_app.application.handlers.command import SetProgressionCommandHandler, \
+    DiscardProgressionCommandHandler, EditProgressionCommandHandler
 from goal_app.domain.messages.command import SetProgressionCommand, \
-    DiscardProgressionCommand
+    DiscardProgressionCommand, EditProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
 from goal_app.infrastructure.repositories.progression import \
     InMemoryProgressionRepository
@@ -35,14 +35,18 @@ class TestGoal(unittest.TestCase):
         "percentage": A_PROGRESSION_PERCENTAGE
     }
 
+    A_NEW_PROGRESSION_NOTE = "I read 70 of the 100 pages. It really is a " \
+                             "fantastic book!"
+    A_NEW_PROGRESSION_PERCENTAGE = 70
+
     def setUp(self):
         self.repository = InMemoryGoalRepository()
         self.repository.add(Goal(**self.A_GOAL_JSON))
 
     def test_set_progression_should_add_new_progression_to_the_goal(self):
-        # Given
         A_GOAL = self.repository._registry[0]
 
+        # Given
         command = SetProgressionCommand(
             goal_id=A_GOAL.id,
             note=self.A_PROGRESSION_NOTE,
@@ -60,8 +64,7 @@ class TestGoal(unittest.TestCase):
         assert goal.progressions[0].note == self.A_PROGRESSION_NOTE
         assert goal.progressions[0].percentage == self.A_PROGRESSION_PERCENTAGE
 
-    def test_discard_goal_progression_should_flag_goal_as_discarded(self):
-        # Given
+    def test_discard_progression_should_flag_goal_as_discarded(self):
         progression = Progression(**self.A_PROGRESSION_JSON)
         progression._id = self.A_PROGRESSION_ID
         progression._goal_id = self.A_GOAL_ID
@@ -69,6 +72,7 @@ class TestGoal(unittest.TestCase):
         repository = InMemoryProgressionRepository()
         repository._registry.append(progression)
 
+        # Given
         command = DiscardProgressionCommand(id=self.A_PROGRESSION_ID)
 
         # When
@@ -77,4 +81,29 @@ class TestGoal(unittest.TestCase):
 
         # Then
         assert progression.discarded
+
+    def test_edit_progression(self):
+        progression = Progression(**self.A_PROGRESSION_JSON)
+        progression._id = self.A_PROGRESSION_ID
+        progression._goal_id = self.A_GOAL_ID
+
+        repository = InMemoryProgressionRepository()
+        repository._registry.append(progression)
+
+        # Given
+        command = EditProgressionCommand(
+            id=self.A_PROGRESSION_ID,
+            note=self.A_NEW_PROGRESSION_NOTE,
+            percentage=self.A_NEW_PROGRESSION_PERCENTAGE)
+
+        # When
+        handler = EditProgressionCommandHandler(repository=repository)
+        handler(command)
+
+        # Then
+        assert progression.note == self.A_NEW_PROGRESSION_NOTE
+        assert progression.percentage == self.A_NEW_PROGRESSION_PERCENTAGE
+
+
+
 

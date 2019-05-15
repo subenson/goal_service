@@ -1,6 +1,6 @@
 from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, SetProgressionCommand, \
-    DiscardProgressionCommand
+    DiscardProgressionCommand, EditProgressionCommand
 from goal_app.domain.models.goal import Goal
 from goal_app.domain.models.progression import Progression
 
@@ -43,3 +43,10 @@ class DiscardProgressionCommandHandler(CommandHandler):
     def __call__(self, command: DiscardProgressionCommand):
         progression = self.repository.get(command.id)
         progression.discard()
+
+
+class EditProgressionCommandHandler(CommandHandler):
+    def __call__(self, command: EditProgressionCommand):
+        progression = self.repository.get(command.id)
+        progression.note = command.note
+        progression.percentage = command.percentage
