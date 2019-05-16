@@ -81,8 +81,9 @@ def list_goals():
 
 @app.route('/goals/<goal_id>/progressions', methods=['GET'])
 def list_goal_progressions(goal_id):
-    goal_progressions = ListProgressionsQuery(database.session())
-    return http_ok(goal_progressions())
+    progression_query = ListProgressionsQuery(database.session())
+    progressions = progression_query(goal_id)
+    return http_ok(progressions)
 
 
 @app.route('/goals/<goal_id>/progressions', methods=['POST'])

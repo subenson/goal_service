@@ -12,9 +12,9 @@ class ListOpenGoalsQuery(Query):
 
 
 class ListProgressionsQuery(Query):
-    def __call__(self):
+    def __call__(self, goal_id):
         result = self._session.execute(
             'SELECT id, note, percentage, datetime FROM goal_progression '
-            'WHERE discarded = False '
-            'ORDER BY datetime DESC')
+            'WHERE discarded = False AND goal_id = "%s"'
+            'ORDER BY datetime DESC' % goal_id)
         return [dict(r) for r in result.fetchall()]
