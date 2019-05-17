@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from goal_app.application.containers import Queries
+from goal_app.application.containers import Queries, Instrumentations
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -38,7 +38,9 @@ def set_goal():
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = SetGoalCommandHandler(repository=repository)
+        handler = SetGoalCommandHandler(  # To-do: IoC
+            repository=repository,
+            instrumentation=Instrumentations.goal())
         handler(command)
 
     return http_no_content()
@@ -50,7 +52,9 @@ def complete_goal(id_):
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = CompleteGoalCommandHandler(repository=repository)
+        handler = CompleteGoalCommandHandler(
+            repository=repository,  # To-do: IoC
+            instrumentation=Instrumentations.goal())
 
         try:
             handler(command)
@@ -65,7 +69,9 @@ def discard_goal(id_):
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = DiscardGoalCommandHandler(repository=repository)
+        handler = DiscardGoalCommandHandler(
+            repository=repository,  # To-do: IoC
+            instrumentation=Instrumentations.goal())
 
         try:
             handler(command)

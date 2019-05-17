@@ -6,8 +6,9 @@ from goal_app.domain.models.progression import Progression
 
 
 class CommandHandler:
-    def __init__(self, repository):
+    def __init__(self, repository, instrumentation):
         self.repository = repository
+        self.instrumentation = instrumentation
 
 
 class SetGoalCommandHandler(CommandHandler):
@@ -17,18 +18,21 @@ class SetGoalCommandHandler(CommandHandler):
             description=command.description,
             due_date=command.due_date)
         self.repository.add(goal)
+        self.instrumentation.goal_set(goal.id)
 
 
 class CompleteGoalCommandHandler(CommandHandler):
     def __call__(self, command: CompleteGoalCommand):
         goal = self.repository.get(command.id)
         goal.complete()
+        self.instrumentation.goal_completed(goal.id)
 
 
 class DiscardGoalCommandHandler(CommandHandler):
     def __call__(self, command: DiscardGoalCommand):
         goal = self.repository.get(command.id)
         goal.discard()
+        self.instrumentation.goal_discarded(goal.id)
 
 
 class SetProgressionCommandHandler(CommandHandler):
