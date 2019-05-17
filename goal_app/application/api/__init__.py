@@ -5,10 +5,14 @@ from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
-    AddProgressionCommandHandler
+    AddProgressionCommandHandler, DiscardProgressionCommandHandler, \
+    EditProgressionCommandHandler
 from goal_app.domain.messages.command import SetGoalCommand, \
-    CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand
+    CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand, \
+    DiscardProgressionCommand, EditProgressionCommand
 from goal_app.domain.models import DiscardedEntityException
+from goal_app.infrastructure.repositories.progression import \
+    SqlAlchemyProgressionRepository
 
 app = Flask('goal')
 
@@ -53,7 +57,6 @@ def complete_goal(id_):
         handler = CompleteGoalCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-
         try:
             handler(command)
             return http_no_content()
@@ -70,7 +73,6 @@ def discard_goal(id_):
         handler = DiscardGoalCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-
         try:
             handler(command)
             return http_no_content()
@@ -92,7 +94,7 @@ def list_goal_progressions(goal_id):
 
 
 @app.route('/goals/<goal_id>/progressions', methods=['POST'])
-def set_goal_progression(goal_id):
+def set_progression(goal_id):
     progression_json = request.get_json()
     progression_json['goal_id'] = goal_id
 
@@ -100,7 +102,46 @@ def set_goal_progression(goal_id):
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = AddProgressionCommandHandler(repository=repository)
+        handler = AddProgressionCommandHandler(
+            repository=repository, instrumentation=Instrumentations.goal())
         handler(command)
 
     return http_no_content()
+
+
+@app.route('/goals/<goal_id>/progressions/<progression_id>', methods=[
+    'DELETE'])
+def discard_progression(goal_id, progression_id):
+    command = DiscardProgressionCommand(id=progression_id)
+
+    with database.unit_of_work() as session:
+        repository = SqlAlchemyProgressionRepository(session)
+        handler = DiscardProgressionCommandHandler(
+            repository=repository,  # To-do: IoC
+            instrumentation=Instrumentations.goal())
+        try:
+            handler(command)
+            return http_no_content()
+        except DiscardedEntityException as ex:
+            return http_conflict(dict(reason=str(ex)))
+
+
+@app.route('/goals/<goal_id>/progressions/<progression_id>', methods=[
+    'PUT'])
+def edit_progression(goal_id, progression_id):
+    progression_json = request.get_json()
+    command = EditProgressionCommand(
+        id=progression_id,
+        note=progression_json.get('note'),
+        percentage=progression_json.get('percentage'))
+
+    with database.unit_of_work() as session:
+        repository = SqlAlchemyProgressionRepository(session)
+        handler = EditProgressionCommandHandler(
+            repository=repository,  # To-do: IoC
+            instrumentation=Instrumentations.goal())
+        try:
+            handler(command)
+            return http_no_content()
+        except DiscardedEntityException as ex:
+            return http_conflict(dict(reason=str(ex)))

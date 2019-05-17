@@ -41,12 +41,14 @@ class AddProgressionCommandHandler(CommandHandler):
         goal.add_progression(Progression(
             note=command.note,
             percentage=command.percentage))
+        self.instrumentation.add_progression(goal.id)
 
 
 class DiscardProgressionCommandHandler(CommandHandler):
     def __call__(self, command: DiscardProgressionCommand):
         progression = self.repository.get(command.id)
         progression.discard()
+        self.instrumentation.discard_progression(progression.id)
 
 
 class EditProgressionCommandHandler(CommandHandler):
@@ -54,3 +56,4 @@ class EditProgressionCommandHandler(CommandHandler):
         progression = self.repository.get(command.id)
         progression.note = command.note
         progression.percentage = command.percentage
+        self.instrumentation.edit_progression(progression.id)
