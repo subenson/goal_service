@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 
+from goal_app.application.containers import Queries
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -75,14 +76,14 @@ def discard_goal(id_):
 
 @app.route('/goals', methods=['GET'])
 def list_goals():
-    open_goals = ListOpenGoalsQuery(database.session())
-    return http_ok(open_goals())
+    open_goals_query = Queries.list_open_goals()
+    return http_ok(open_goals_query())
 
 
 @app.route('/goals/<goal_id>/progressions', methods=['GET'])
 def list_goal_progressions(goal_id):
-    progression_query = ListProgressionsQuery(database.session())
-    progressions = progression_query(goal_id)
+    query = Queries.list_progressions()
+    progressions = query(goal_id=goal_id)
     return http_ok(progressions)
 
 
