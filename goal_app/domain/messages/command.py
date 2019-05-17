@@ -17,7 +17,7 @@ class DiscardGoalCommand(NamedTuple):
     id: uuid.uuid4
 
 
-class SetProgressionCommand(NamedTuple):
+class AddProgressionCommand(NamedTuple):
     goal_id: uuid.uuid4
     note: str
     percentage: int

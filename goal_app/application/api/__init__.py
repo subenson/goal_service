@@ -5,11 +5,9 @@ from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
-    SetProgressionCommandHandler
-from goal_app.application.handlers.query import ListOpenGoalsQuery, \
-    ListProgressionsQuery
+    AddProgressionCommandHandler
 from goal_app.domain.messages.command import SetGoalCommand, \
-    CompleteGoalCommand, DiscardGoalCommand, SetProgressionCommand
+    CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand
 from goal_app.domain.models import DiscardedEntityException
 
 app = Flask('goal')
@@ -98,11 +96,11 @@ def set_goal_progression(goal_id):
     progression_json = request.get_json()
     progression_json['goal_id'] = goal_id
 
-    command = SetProgressionCommand(**progression_json)
+    command = AddProgressionCommand(**progression_json)
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = SetProgressionCommandHandler(repository=repository)
+        handler = AddProgressionCommandHandler(repository=repository)
         handler(command)
 
     return http_no_content()
