@@ -1,9 +1,9 @@
 import unittest
 from datetime import datetime
 
-from goal_app.application.handlers.command import SetProgressionCommandHandler, \
+from goal_app.application.handlers.command import AddProgressionCommandHandler, \
     DiscardProgressionCommandHandler, EditProgressionCommandHandler
-from goal_app.domain.messages.command import SetProgressionCommand, \
+from goal_app.domain.messages.command import AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
 from goal_app.infrastructure.repositories.progression import \
@@ -43,17 +43,17 @@ class TestGoal(unittest.TestCase):
         self.repository = InMemoryGoalRepository()
         self.repository.add(Goal(**self.A_GOAL_JSON))
 
-    def test_set_progression_should_add_new_progression_to_the_goal(self):
+    def test_add_progression_should_add_new_progression_to_the_goal(self):
         A_GOAL = self.repository._registry[0]
 
         # Given
-        command = SetProgressionCommand(
+        command = AddProgressionCommand(
             goal_id=A_GOAL.id,
             note=self.A_PROGRESSION_NOTE,
             percentage=self.A_PROGRESSION_PERCENTAGE)
 
         # When
-        handler = SetProgressionCommandHandler(repository=self.repository)
+        handler = AddProgressionCommandHandler(repository=self.repository)
         handler(command)
 
         # Then
