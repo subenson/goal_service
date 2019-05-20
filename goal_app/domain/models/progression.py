@@ -5,6 +5,8 @@ from goal_app.domain.models import Entity
 
 class InvalidPercentageException(Exception):
     """Indicates that a invalid percentage is provided."""
+    def __str__(self):
+        return "invalid_percentage"
 
 
 class Progression(Entity):
