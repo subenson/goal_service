@@ -11,7 +11,7 @@ from goal_app.domain.models.goal import Goal
 from goal_app.domain.models import DiscardedEntityException
 
 
-class TestGoal(unittest.TestCase):
+class TestGoalCommandHandler(unittest.TestCase):
 
     A_GOAL_NAME = "Read a book this week"
     A_GOAL_DESCRIPTION = "7 Habits of Highly Effective People"

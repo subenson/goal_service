@@ -13,7 +13,7 @@ from goal_app.domain.models.goal import Goal
 from goal_app.domain.models.progression import Progression
 
 
-class TestGoal(unittest.TestCase):
+class TestProgressionCommandHandler(unittest.TestCase):
 
     A_GOAL_ID = "12345678-1234-5678-9012-123456789012"
     A_GOAL_NAME = "Read a book this week"
