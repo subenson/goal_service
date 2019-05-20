@@ -3,6 +3,7 @@ from datetime import datetime
 
 from goal_app.application.handlers.command import AddProgressionCommandHandler, \
     DiscardProgressionCommandHandler, EditProgressionCommandHandler
+from goal_app.application.instrumentation.goal import FakeGoalInstrumentation
 from goal_app.domain.messages.command import AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
@@ -53,7 +54,9 @@ class TestGoal(unittest.TestCase):
             percentage=self.A_PROGRESSION_PERCENTAGE)
 
         # When
-        handler = AddProgressionCommandHandler(repository=self.repository)
+        handler = AddProgressionCommandHandler(
+            repository=self.repository,
+            instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
@@ -76,7 +79,8 @@ class TestGoal(unittest.TestCase):
         command = DiscardProgressionCommand(id=self.A_PROGRESSION_ID)
 
         # When
-        handler = DiscardProgressionCommandHandler(repository=repository)
+        handler = DiscardProgressionCommandHandler(
+            repository=repository, instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
@@ -97,13 +101,10 @@ class TestGoal(unittest.TestCase):
             percentage=self.A_NEW_PROGRESSION_PERCENTAGE)
 
         # When
-        handler = EditProgressionCommandHandler(repository=repository)
+        handler = EditProgressionCommandHandler(
+            repository=repository, instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
         assert progression.note == self.A_NEW_PROGRESSION_NOTE
         assert progression.percentage == self.A_NEW_PROGRESSION_PERCENTAGE
-
-
-
-
