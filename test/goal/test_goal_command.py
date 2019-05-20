@@ -3,6 +3,7 @@ from datetime import datetime
 
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
+from goal_app.application.instrumentation.goal import FakeGoalInstrumentation
 from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
@@ -33,7 +34,9 @@ class TestGoal(unittest.TestCase):
             due_date=self.A_GOAL_DUE_DATE)
 
         # When
-        handler = SetGoalCommandHandler(repository=self.repository)
+        handler = SetGoalCommandHandler(
+            repository=self.repository,
+            instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
@@ -46,7 +49,9 @@ class TestGoal(unittest.TestCase):
         command = CompleteGoalCommand(id=goal.id)
 
         # When
-        handler = CompleteGoalCommandHandler(repository=self.repository)
+        handler = CompleteGoalCommandHandler(
+            repository=self.repository,
+            instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
@@ -61,7 +66,9 @@ class TestGoal(unittest.TestCase):
 
         # When
         with self.assertRaises(DiscardedEntityException):
-            handler = CompleteGoalCommandHandler(repository=self.repository)
+            handler = CompleteGoalCommandHandler(
+                repository=self.repository,
+                instrumentation=FakeGoalInstrumentation)
             handler(command)
 
     def test_discard_goal_should_flag_goal_as_discarded(self):
@@ -71,7 +78,9 @@ class TestGoal(unittest.TestCase):
         command = DiscardGoalCommand(id=goal.id)
 
         # When
-        handler = DiscardGoalCommandHandler(repository=self.repository)
+        handler = DiscardGoalCommandHandler(
+            repository=self.repository,
+            instrumentation=FakeGoalInstrumentation)
         handler(command)
 
         # Then
@@ -86,5 +95,7 @@ class TestGoal(unittest.TestCase):
 
         # When
         with self.assertRaises(DiscardedEntityException):
-            handler = DiscardGoalCommandHandler(repository=self.repository)
+            handler = DiscardGoalCommandHandler(
+                repository=self.repository,
+                instrumentation=FakeGoalInstrumentation)
             handler(command)
