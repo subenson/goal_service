@@ -11,9 +11,16 @@ class CommandHandler:
         self.instrumentation = instrumentation
 
 
-class SetGoalCommandHandler(CommandHandler):
+class FactoryCommandHandler:
+    def __init__(self, factory, repository, instrumentation):
+        self.factory = factory
+        self.repository = repository
+        self.instrumentation = instrumentation
+
+
+class SetGoalCommandHandler(FactoryCommandHandler):
     def __call__(self, command: SetGoalCommand):
-        goal = Goal(
+        goal = self.factory.create(
             name=command.name,
             description=command.description,
             due_date=command.due_date)

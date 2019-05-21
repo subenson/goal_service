@@ -1,18 +1,22 @@
 import unittest
 from datetime import datetime
 
+from mockito import mock, when
+
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
-from goal_app.application.instrumentation.goal import FakeGoalInstrumentation
+from goal_app.application.instrumentation.goal import FakeGoalInstrumentation, \
+    GoalInstrumentation
 from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
-from goal_app.domain.models.goal import Goal
+from goal_app.domain.models.goal import Goal, GoalFactory
 from goal_app.domain.models import DiscardedEntityException
 
 
 class TestGoal(unittest.TestCase):
 
+    A_GOAL_ID = "12345678-1234-5678-9012-123456789012"
     A_GOAL_NAME = "Read a book this week"
     A_GOAL_DESCRIPTION = "7 Habits of Highly Effective People"
     A_GOAL_DUE_DATE = datetime.now()
@@ -23,8 +27,20 @@ class TestGoal(unittest.TestCase):
         "due_date": A_GOAL_DUE_DATE
     }
 
+    A_GOAL = mock({
+        "id": A_GOAL_ID,
+        "name": A_GOAL_NAME,
+        "description": A_GOAL_DESCRIPTION,
+        "due_date": A_GOAL_DUE_DATE
+    }, spec=Goal)
+
     def setUp(self):
+        self.factory = mock(GoalFactory)
         self.repository = InMemoryGoalRepository()
+        self.instrumentation = mock(GoalInstrumentation)
+
+        when(self.factory).create(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
+        when(self.instrumentation).goal_set(self.A_GOAL_ID).thenReturn(None)
 
     def test_set_goal_should_add_new_goal_to_the_repository(self):
         # Given
@@ -35,8 +51,9 @@ class TestGoal(unittest.TestCase):
 
         # When
         handler = SetGoalCommandHandler(
+            factory=self.factory,
             repository=self.repository,
-            instrumentation=FakeGoalInstrumentation)
+            instrumentation=self.instrumentation)
         handler(command)
 
         # Then
