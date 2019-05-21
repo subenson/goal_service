@@ -26,3 +26,7 @@ class Progression(Entity):
     @percentage.setter
     def percentage(self, percentage: int):
         self._percentage = percentage
+
+
+def create_progression(note, percentage):
+    return Progression(note=note, percentage=percentage)

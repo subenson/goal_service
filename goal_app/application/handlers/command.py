@@ -42,12 +42,12 @@ class DiscardGoalCommandHandler(CommandHandler):
         self.instrumentation.goal_discarded(goal)
 
 
-class AddProgressionCommandHandler(CommandHandler):
+class AddProgressionCommandHandler(FactoryCommandHandler):
     def __call__(self, command: AddProgressionCommand):
         goal = self.repository.get(command.goal_id)
-        goal.add_progression(Progression(
-            note=command.note,
-            percentage=command.percentage))
+        progression = self.factory(note=command.note,
+                                   percentage=command.percentage)
+        goal.add_progression(progression)
         self.instrumentation.add_progression(goal)
 
 

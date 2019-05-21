@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 
 from goal_app.application.containers import Queries, Instrumentations
 from goal_app.domain.models.goal import create_goal
+from goal_app.domain.models.progression import create_progression
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -96,7 +97,7 @@ def list_goal_progressions(goal_id):
 
 
 @app.route('/goals/<goal_id>/progressions', methods=['POST'])
-def set_progression(goal_id):
+def add_progression(goal_id):
     progression_json = request.get_json()
     progression_json['goal_id'] = goal_id
 
@@ -105,7 +106,9 @@ def set_progression(goal_id):
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
         handler = AddProgressionCommandHandler(
-            repository=repository, instrumentation=Instrumentations.goal())
+            factory=create_progression,
+            repository=repository,
+            instrumentation=Instrumentations.goal())
         handler(command)
 
     return http_no_content()

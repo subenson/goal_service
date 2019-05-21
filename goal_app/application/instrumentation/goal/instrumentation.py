@@ -63,27 +63,3 @@ class DevGoalInstrumentation(GoalInstrumentation):
         self.metrics.progression_edited()
         self.logger.log(f'- Progression Edited: {progression.id} '
                         f'(Total: {self.metrics.progressions_edited})')
-
-
-class FakeGoalInstrumentation(GoalInstrumentation):
-
-    def __init__(self):
-        pass
-
-    def goal_set(self, *args):
-        pass
-
-    def goal_completed(self, *args):
-        pass
-
-    def goal_discarded(self, *args):
-        pass
-
-    def add_progression(self, *args):
-        pass
-
-    def discard_progression(self, *args):
-        pass
-
-    def edit_progression(self, *args):
-        pass
