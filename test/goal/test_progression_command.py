@@ -10,13 +10,11 @@ from goal_app.application.instrumentation.goal.instrumentation import \
 from goal_app.domain.messages.command import AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
-from goal_app.infrastructure.repositories.progression import \
-    InMemoryProgressionRepository
 from goal_app.domain.models.goal import Goal
 from goal_app.domain.models.progression import Progression, create_progression
 
 
-class TestGoal(unittest.TestCase):
+class TestProgressionCommandHandler(unittest.TestCase):
 
     A_GOAL_ID = "12345678-1234-5678-9012-123456789012"
     A_GOAL_NAME = "Read a book this week"

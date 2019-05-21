@@ -3,12 +3,18 @@ from datetime import datetime
 from goal_app.domain.models import Entity
 
 
+class InvalidPercentageException(Exception):
+    """Indicates that a invalid percentage is provided."""
+    def __str__(self):
+        return "invalid_percentage"
+
+
 class Progression(Entity):
 
     def __init__(self, note, percentage):
         super().__init__()
-        self._note = note
-        self._percentage = percentage
+        self.note = note
+        self.percentage = percentage
         self._datetime = datetime.now()
 
     @property
@@ -25,6 +31,8 @@ class Progression(Entity):
 
     @percentage.setter
     def percentage(self, percentage: int):
+        if not 0 <= percentage <= 100:
+            raise InvalidPercentageException()
         self._percentage = percentage
 
 

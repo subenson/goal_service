@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from goal_app.application.containers import Queries, Instrumentations
 from goal_app.domain.models.goal import create_goal
 from goal_app.domain.models.progression import create_progression
+from goal_app.domain.models.progression import InvalidPercentageException
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -109,9 +110,11 @@ def add_progression(goal_id):
             factory=create_progression,
             repository=repository,
             instrumentation=Instrumentations.goal())
-        handler(command)
-
-    return http_no_content()
+        try:
+            handler(command)
+            return http_no_content()
+        except InvalidPercentageException as ex:
+            return http_conflict(dict(reason=str(ex)))
 
 
 @app.route('/goals/<goal_id>/progressions/<progression_id>', methods=[
@@ -148,5 +151,7 @@ def edit_progression(goal_id, progression_id):
         try:
             handler(command)
             return http_no_content()
+        except InvalidPercentageException as ex:
+            return http_conflict(dict(reason=str(ex)))
         except DiscardedEntityException as ex:
             return http_conflict(dict(reason=str(ex)))
