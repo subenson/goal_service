@@ -20,6 +20,16 @@ from goal_app.infrastructure.repositories.progression import \
 app = Flask('goal')
 
 
+@app.errorhandler(DiscardedEntityException)
+def discarded_entity_error(error):
+    return http_conflict(dict(reason=error.__str__()))
+
+
+@app.errorhandler(InvalidPercentageException)
+def invalid_percentage_exception(error):
+    return http_conflict(dict(reason=error.__str__()))
+
+
 def http_ok(body={}, headers=None):
     return jsonify(body), 200, headers
 
@@ -61,11 +71,8 @@ def complete_goal(id_):
         handler = CompleteGoalCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-        try:
-            handler(command)
-            return http_no_content()
-        except DiscardedEntityException as ex:
-            return http_conflict(dict(reason=str(ex)))
+        handler(command)
+        return http_no_content()
 
 
 @app.route('/goals/<id_>', methods=['DELETE'])
@@ -77,11 +84,8 @@ def discard_goal(id_):
         handler = DiscardGoalCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-        try:
-            handler(command)
-            return http_no_content()
-        except DiscardedEntityException as ex:
-            return http_conflict(dict(reason=str(ex)))
+        handler(command)
+        return http_no_content()
 
 
 @app.route('/goals', methods=['GET'])
@@ -110,11 +114,8 @@ def add_progression(goal_id):
             factory=create_progression,
             repository=repository,
             instrumentation=Instrumentations.goal())
-        try:
-            handler(command)
-            return http_no_content()
-        except InvalidPercentageException as ex:
-            return http_conflict(dict(reason=str(ex)))
+        handler(command)
+        return http_no_content()
 
 
 @app.route('/goals/<goal_id>/progressions/<progression_id>', methods=[
@@ -127,11 +128,8 @@ def discard_progression(goal_id, progression_id):
         handler = DiscardProgressionCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-        try:
-            handler(command)
-            return http_no_content()
-        except DiscardedEntityException as ex:
-            return http_conflict(dict(reason=str(ex)))
+        handler(command)
+        return http_no_content()
 
 
 @app.route('/goals/<goal_id>/progressions/<progression_id>', methods=[
@@ -148,10 +146,5 @@ def edit_progression(goal_id, progression_id):
         handler = EditProgressionCommandHandler(
             repository=repository,  # To-do: IoC
             instrumentation=Instrumentations.goal())
-        try:
-            handler(command)
-            return http_no_content()
-        except InvalidPercentageException as ex:
-            return http_conflict(dict(reason=str(ex)))
-        except DiscardedEntityException as ex:
-            return http_conflict(dict(reason=str(ex)))
+        handler(command)
+        return http_no_content()
