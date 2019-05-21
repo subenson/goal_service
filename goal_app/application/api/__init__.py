@@ -4,6 +4,7 @@ from goal_app.application.containers import Queries, Instrumentations
 from goal_app.domain.models.goal import create_goal
 from goal_app.domain.models.progression import create_progression
 from goal_app.domain.models.progression import InvalidPercentageException
+from goal_app.infrastructure.repositories import EntityNotFoundException
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -30,6 +31,11 @@ def invalid_percentage_exception(error):
     return http_conflict(dict(reason=error.__str__()))
 
 
+@app.errorhandler(EntityNotFoundException)
+def entity_not_found_exception(error):
+    return http_not_found(dict(reason=error.__str__()))
+
+
 def http_ok(body={}, headers=None):
     return jsonify(body), 200, headers
 
@@ -40,6 +46,10 @@ def http_no_content(headers=None):
 
 def http_conflict(body={}, headers=None):
     return jsonify(body), 409, headers
+
+
+def http_not_found(body={}, headers=None):
+    return jsonify(body), 404, headers
 
 
 @app.route('/', methods=['GET'])

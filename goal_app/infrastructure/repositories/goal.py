@@ -1,6 +1,7 @@
 from sqlalchemy.orm.session import Session
 from goal_app.domain.models.goal import Goal
 from goal_app.domain.port import Repository
+from goal_app.infrastructure.repositories import EntityNotFoundException
 
 
 class InMemoryGoalRepository(Repository):
@@ -15,7 +16,7 @@ class InMemoryGoalRepository(Repository):
         for goal in self._registry:
             if goal.id == id_:
                 return goal
-        return None
+        raise EntityNotFoundException
 
     def __len__(self) -> int:
         return len(self._registry)
@@ -30,7 +31,10 @@ class SqlAlchemyGoalRepository(Repository):
         self._session.add(goal)
 
     def get(self, id_) -> Goal:
-        return self._session.query(Goal).get(id_)
+        goal = self._session.query(Goal).get(id_)
+        if goal:
+            return goal
+        raise EntityNotFoundException
 
     def __len__(self) -> int:
         return self._session.query(Goal).count()

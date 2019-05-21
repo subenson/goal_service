@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from goal_app.domain.models.progression import Progression
 from goal_app.domain.port import Repository
+from goal_app.infrastructure.repositories import EntityNotFoundException
 
 
 class InMemoryProgressionRepository(Repository):
@@ -16,7 +17,7 @@ class InMemoryProgressionRepository(Repository):
         for progression in self._registry:
             if progression.id == id_:
                 return progression
-        return None
+        return EntityNotFoundException
 
     def __len__(self) -> int:
         return len(self._registry)
@@ -31,7 +32,10 @@ class SqlAlchemyProgressionRepository(Repository):
         raise Exception("Unable to add progressions directly in the database.")
 
     def get(self, id_) -> Progression:
-        return self._session.query(Progression).get(id_)
+        progression = self._session.query(Progression).get(id_)
+        if progression:
+            return progression
+        raise EntityNotFoundException
 
     def __len__(self) -> int:
         return self._session.query(Progression).count()
