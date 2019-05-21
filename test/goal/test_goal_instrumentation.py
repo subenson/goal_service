@@ -6,7 +6,7 @@ from mockito import mock, when, verify
 from goal_app.application.handlers.command import SetGoalCommandHandler
 from goal_app.application.instrumentation.goal import GoalInstrumentation
 from goal_app.domain.messages.command import SetGoalCommand
-from goal_app.domain.models.goal import Goal, GoalFactory
+from goal_app.domain.models.goal import Goal, create_goal
 from goal_app.domain.port import Repository
 
 
@@ -31,13 +31,13 @@ class TestGoalInstrumentation(unittest.TestCase):
     }, spec=Goal)
 
     def setUp(self):
-        self.factory = mock(GoalFactory)
+        self.factory = mock(create_goal)
         self.repository = mock(Repository)
         self.instrumentation = mock(GoalInstrumentation)
 
-        when(self.factory).create(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
+        when(self.factory).__call__(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
         when(self.repository).add(self.A_GOAL).thenReturn(None)
-        when(self.instrumentation).goal_set(self.A_GOAL_ID).thenReturn(None)
+        when(self.instrumentation).goal_set(self.A_GOAL).thenReturn(None)
 
     def test_goal_set_instrumentation(self):
         # Given
@@ -54,4 +54,4 @@ class TestGoalInstrumentation(unittest.TestCase):
         handler(command)
 
         # Then
-        verify(self.instrumentation, times=1).goal_set(self.A_GOAL_ID)
+        verify(self.instrumentation, times=1).goal_set(self.A_GOAL)

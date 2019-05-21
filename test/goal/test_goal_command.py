@@ -10,7 +10,7 @@ from goal_app.application.instrumentation.goal import FakeGoalInstrumentation, \
 from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
-from goal_app.domain.models.goal import Goal, GoalFactory
+from goal_app.domain.models.goal import Goal, create_goal
 from goal_app.domain.models import DiscardedEntityException
 
 
@@ -35,12 +35,12 @@ class TestGoal(unittest.TestCase):
     }, spec=Goal)
 
     def setUp(self):
-        self.factory = mock(GoalFactory)
+        self.factory = mock(create_goal)
         self.repository = InMemoryGoalRepository()
         self.instrumentation = mock(GoalInstrumentation)
 
-        when(self.factory).create(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
-        when(self.instrumentation).goal_set(self.A_GOAL_ID).thenReturn(None)
+        when(self.factory).__call__(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
+        when(self.instrumentation).goal_set(self.A_GOAL).thenReturn(None)
 
     def test_set_goal_should_add_new_goal_to_the_repository(self):
         # Given

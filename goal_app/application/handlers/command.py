@@ -20,7 +20,7 @@ class FactoryCommandHandler:
 
 class SetGoalCommandHandler(FactoryCommandHandler):
     def __call__(self, command: SetGoalCommand):
-        goal = self.factory.create(
+        goal = self.factory(
             name=command.name,
             description=command.description,
             due_date=command.due_date)

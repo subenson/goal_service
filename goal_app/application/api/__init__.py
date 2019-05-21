@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
 from goal_app.application.containers import Queries, Instrumentations
-from goal_app.domain.models.goal import GoalFactory
+from goal_app.domain.models.goal import create_goal
 from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
 from goal_app.infrastructure.orm import database
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
@@ -40,10 +40,9 @@ def set_goal():
     command = SetGoalCommand(**request.get_json())
 
     with database.unit_of_work() as session:
-        factory = GoalFactory()
         repository = SqlAlchemyGoalRepository(session)
         handler = SetGoalCommandHandler(  # To-do: IoC
-            factory=factory,
+            factory=create_goal,
             repository=repository,
             instrumentation=Instrumentations.goal())
         handler(command)

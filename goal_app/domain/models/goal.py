@@ -28,7 +28,5 @@ class Goal(Entity):
         self.progressions.append(progression)
 
 
-class GoalFactory:
-
-    def create(self, name, description, due_date):
-        return Goal(name=name, description=description, due_date=due_date)
+def create_goal(name, description, due_date):
+    return Goal(name=name, description=description, due_date=due_date)
