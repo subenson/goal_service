@@ -25,21 +25,21 @@ class SetGoalCommandHandler(FactoryCommandHandler):
             description=command.description,
             due_date=command.due_date)
         self.repository.add(goal)
-        self.instrumentation.goal_set(goal.id)
+        self.instrumentation.goal_set(goal)
 
 
 class CompleteGoalCommandHandler(CommandHandler):
     def __call__(self, command: CompleteGoalCommand):
         goal = self.repository.get(command.id)
         goal.complete()
-        self.instrumentation.goal_completed(goal.id)
+        self.instrumentation.goal_completed(goal)
 
 
 class DiscardGoalCommandHandler(CommandHandler):
     def __call__(self, command: DiscardGoalCommand):
         goal = self.repository.get(command.id)
         goal.discard()
-        self.instrumentation.goal_discarded(goal.id)
+        self.instrumentation.goal_discarded(goal)
 
 
 class AddProgressionCommandHandler(CommandHandler):
@@ -48,14 +48,14 @@ class AddProgressionCommandHandler(CommandHandler):
         goal.add_progression(Progression(
             note=command.note,
             percentage=command.percentage))
-        self.instrumentation.add_progression(goal.id)
+        self.instrumentation.add_progression(goal)
 
 
 class DiscardProgressionCommandHandler(CommandHandler):
     def __call__(self, command: DiscardProgressionCommand):
         progression = self.repository.get(command.id)
         progression.discard()
-        self.instrumentation.discard_progression(progression.id)
+        self.instrumentation.discard_progression(progression)
 
 
 class EditProgressionCommandHandler(CommandHandler):
@@ -63,4 +63,4 @@ class EditProgressionCommandHandler(CommandHandler):
         progression = self.repository.get(command.id)
         progression.note = command.note
         progression.percentage = command.percentage
-        self.instrumentation.edit_progression(progression.id)
+        self.instrumentation.edit_progression(progression)

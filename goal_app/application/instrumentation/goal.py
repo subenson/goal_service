@@ -33,35 +33,35 @@ class GoalInstrumentation:
         self.logger = logger
         self.metrics = metrics
 
-    def goal_set(self, goal_id):
+    def goal_set(self, goal):
         self.metrics.goal_set()
-        self.logger(f'- Goal Set: {goal_id} '
+        self.logger(f'- Goal Set: {goal.id} '
                     f'(Total: {self.metrics.goals_set})')
 
-    def goal_completed(self, goal_id):
+    def goal_completed(self, goal):
         self.metrics.goal_completed()
-        self.logger(f'- Goal Completed: {goal_id}'
-                    f'(Total: {self.metrics.goals_completed}')
+        self.logger(f'- Goal Completed: {goal.id} '
+                    f'(Total: {self.metrics.goals_completed})')
 
-    def goal_discarded(self, goal_id):
+    def goal_discarded(self, goal):
         self.metrics.goal_discarded()
-        self.logger(f'- Goal Discarded: {goal_id}'
-                    f'(Total: {self.metrics.goals_discarded}')
+        self.logger(f'- Goal Discarded: {goal.id} '
+                    f'(Total: {self.metrics.goals_discarded})')
 
-    def add_progression(self, goal_id):
+    def add_progression(self, goal):
         self.metrics.progression_added()
-        self.logger(f'- Progression Added to Goal: {goal_id}'
-                    f'(Total: {self.metrics.progressions_added}')
+        self.logger(f'- Progression Added to Goal: {goal.id} '
+                    f'(Total: {self.metrics.progressions_added})')
 
-    def discard_progression(self, goal_id):
+    def discard_progression(self, progression):
         self.metrics.progression_discarded()
-        self.logger(f'- Progression Discarded: {goal_id}'
-                    f'(Total: {self.metrics.progressions_discarded}')
+        self.logger(f'- Progression Discarded: {progression.id} '
+                    f'(Total: {self.metrics.progressions_discarded})')
 
-    def edit_progression(self, goal_id):
+    def edit_progression(self, progression):
         self.metrics.progression_edited()
-        self.logger(f'- Progression Edited: {goal_id}'
-                    f'(Total: {self.metrics.progressions_edited}')
+        self.logger(f'- Progression Edited: {progression.id} '
+                    f'(Total: {self.metrics.progressions_edited})')
 
 
 class FakeGoalInstrumentation:
