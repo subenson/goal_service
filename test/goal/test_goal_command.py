@@ -5,7 +5,8 @@ from mockito import mock, when
 
 from goal_app.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler
-from goal_app.application.instrumentation.goal import FakeGoalInstrumentation, \
+from goal_app.application.instrumentation.goal.instrumentation import \
+    FakeGoalInstrumentation, \
     GoalInstrumentation
 from goal_app.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand

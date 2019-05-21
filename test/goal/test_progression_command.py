@@ -3,7 +3,8 @@ from datetime import datetime
 
 from goal_app.application.handlers.command import AddProgressionCommandHandler, \
     DiscardProgressionCommandHandler, EditProgressionCommandHandler
-from goal_app.application.instrumentation.goal import FakeGoalInstrumentation
+from goal_app.application.instrumentation.goal.instrumentation import \
+    FakeGoalInstrumentation
 from goal_app.domain.messages.command import AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
 from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository

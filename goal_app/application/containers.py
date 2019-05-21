@@ -2,8 +2,11 @@ from dependency_injector import providers, containers
 
 from goal_app.application.handlers.query import ListOpenGoalsQuery, \
     ListProgressionsQuery
-from goal_app.application.instrumentation.goal import GoalInstrumentation, \
+from goal_app.application.instrumentation.goal.instrumentation import \
+    DevGoalInstrumentation
+from goal_app.application.instrumentation.goal.metrics import \
     InMemoryGoalMetrics
+from goal_app.application.instrumentation.logger import ConsoleLogger
 from goal_app.infrastructure.orm import database
 
 
@@ -20,4 +23,5 @@ class Queries(containers.DeclarativeContainer):
 
 class Instrumentations(containers.DeclarativeContainer):
     goal = providers.Factory(
-        GoalInstrumentation, logger=print, metrics=InMemoryGoalMetrics())
+        DevGoalInstrumentation, logger=ConsoleLogger(),
+        metrics=InMemoryGoalMetrics())
