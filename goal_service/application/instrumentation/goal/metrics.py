@@ -4,27 +4,27 @@ from abc import ABC, abstractmethod
 class GoalMetrics(ABC):
 
     @abstractmethod
-    def goal_set(self, goal):
+    def goal_set(self):
         raise NotImplementedError
 
     @abstractmethod
-    def goal_completed(self, goal):
+    def goal_completed(self):
         raise NotImplementedError
 
     @abstractmethod
-    def goal_discarded(self, goal):
+    def goal_discarded(self):
         raise NotImplementedError
 
     @abstractmethod
-    def progression_added(self, goal):
+    def progression_added(self):
         raise NotImplementedError
 
     @abstractmethod
-    def progression_discarded(self, goal):
+    def progression_discarded(self):
         raise NotImplementedError
 
     @abstractmethod
-    def progression_edited(self, goal):
+    def progression_edited(self):
         raise NotImplementedError
 
 
