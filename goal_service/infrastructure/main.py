@@ -1,8 +1,10 @@
+from goal_service.domain.models.goal import create_goal
 from goal_service.infrastructure.orm.database import database
 from goal_service.application.handlers.command import SetGoalCommandHandler
 from goal_service.domain.messages.command import SetGoalCommand
 from goal_service.infrastructure.repositories.goal import \
     SqlAlchemyGoalRepository
+from goal_service.application.containers import Instrumentations
 
 
 if __name__ == '__main__':
@@ -16,7 +18,11 @@ if __name__ == '__main__':
 
     with database.unit_of_work() as session:
         repository = SqlAlchemyGoalRepository(session)
-        handler = SetGoalCommandHandler(repository=repository)
+        handler = SetGoalCommandHandler(
+            factory=create_goal,
+            repository=repository,
+            instrumentation=Instrumentations.goal()
+        )
 
         print(f'Count goals: {len(repository)}')
         print(f'Handle Command: {command.name}')
