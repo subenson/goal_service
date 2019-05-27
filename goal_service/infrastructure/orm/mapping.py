@@ -1,9 +1,9 @@
 from sqlalchemy.orm import mapper, relationship
 
-from goal_app.infrastructure.orm.schema import GOAL_TABLE, \
+from goal_service.infrastructure.orm.schema import GOAL_TABLE, \
     GOAL_PROGRESSION_TABLE
-from goal_app.domain.models.goal import Goal
-from goal_app.domain.models.progression import Progression
+from goal_service.domain.models.goal import Goal
+from goal_service.domain.models.progression import Progression
 
 mapper(Goal, GOAL_TABLE, properties={
     '_id': GOAL_TABLE.c.id,

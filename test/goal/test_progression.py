@@ -1,5 +1,5 @@
 import unittest
-from goal_app.domain.models.progression import Progression, \
+from goal_service.domain.models.progression import Progression, \
     InvalidPercentageException
 
 

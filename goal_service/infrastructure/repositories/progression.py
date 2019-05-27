@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from goal_app.domain.models.progression import Progression
-from goal_app.domain.port import Repository
-from goal_app.infrastructure.repositories import EntityNotFoundException
+from goal_service.domain.models.progression import Progression
+from goal_service.domain.port import Repository
+from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
 class InMemoryProgressionRepository(Repository):

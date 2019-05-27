@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from goal_app.domain.models import Entity
+from goal_service.domain.models import Entity
 
 
 class InvalidPercentageException(Exception):

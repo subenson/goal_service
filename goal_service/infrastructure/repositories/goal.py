@@ -1,7 +1,7 @@
 from sqlalchemy.orm.session import Session
-from goal_app.domain.models.goal import Goal
-from goal_app.domain.port import Repository
-from goal_app.infrastructure.repositories import EntityNotFoundException
+from goal_service.domain.models.goal import Goal
+from goal_service.domain.port import Repository
+from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
 class InMemoryGoalRepository(Repository):

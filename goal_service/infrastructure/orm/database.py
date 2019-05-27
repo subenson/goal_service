@@ -26,5 +26,5 @@ class SqlAlchemy:
             session.close()
 
 
-database = SqlAlchemy('sqlite:////Users/svendenotter/Code/Python/goal_app'
-                      '/goal_app/infrastructure/test.db')
+database = SqlAlchemy('sqlite:////Users/svendenotter/Code/Python/goal_service'
+                      '/goal_service/infrastructure/test.db')

@@ -1,21 +1,22 @@
 from flask import Flask, request, jsonify
 
-from goal_app.application.containers import Queries, Instrumentations
-from goal_app.domain.models.goal import create_goal
-from goal_app.domain.models.progression import create_progression
-from goal_app.domain.models.progression import InvalidPercentageException
-from goal_app.infrastructure.repositories import EntityNotFoundException
-from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
-from goal_app.infrastructure.orm import database
-from goal_app.application.handlers.command import SetGoalCommandHandler, \
+from goal_service.application.containers import Queries, Instrumentations
+from goal_service.domain.models.goal import create_goal
+from goal_service.domain.models.progression import create_progression
+from goal_service.domain.models.progression import InvalidPercentageException
+from goal_service.infrastructure.repositories import EntityNotFoundException
+from goal_service.infrastructure.repositories.goal import \
+    SqlAlchemyGoalRepository
+from goal_service.infrastructure.orm import database
+from goal_service.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
     AddProgressionCommandHandler, DiscardProgressionCommandHandler, \
     EditProgressionCommandHandler
-from goal_app.domain.messages.command import SetGoalCommand, \
+from goal_service.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
-from goal_app.domain.models import DiscardedEntityException
-from goal_app.infrastructure.repositories.progression import \
+from goal_service.domain.models import DiscardedEntityException
+from goal_service.infrastructure.repositories.progression import \
     SqlAlchemyProgressionRepository
 
 app = Flask('goal')

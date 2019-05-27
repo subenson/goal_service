@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from goal_app.domain.models import Entity
+from goal_service.domain.models import Entity
 
 
 class Repository(metaclass=ABCMeta):

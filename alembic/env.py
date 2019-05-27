@@ -6,7 +6,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from goal_app.infrastructure.orm.database import database
+from goal_service.infrastructure.orm.database import database
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

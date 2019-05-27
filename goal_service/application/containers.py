@@ -1,13 +1,13 @@
 from dependency_injector import providers, containers
 
-from goal_app.application.handlers.query import ListOpenGoalsQuery, \
+from goal_service.application.handlers.query import ListOpenGoalsQuery, \
     ListProgressionsQuery
-from goal_app.application.instrumentation.goal.instrumentation import \
+from goal_service.application.instrumentation.goal.instrumentation import \
     DevGoalInstrumentation
-from goal_app.application.instrumentation.goal.metrics import \
+from goal_service.application.instrumentation.goal.metrics import \
     InMemoryGoalMetrics
-from goal_app.application.instrumentation.logger import ConsoleLogger
-from goal_app.infrastructure.orm import database
+from goal_service.application.instrumentation.logger import ConsoleLogger
+from goal_service.infrastructure.orm import database
 
 
 class Core(containers.DeclarativeContainer):
