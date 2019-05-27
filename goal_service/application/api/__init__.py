@@ -39,7 +39,7 @@ def entity_not_found_exception(error):
 
 
 @app.errorhandler(RelatedEntityNotFoundException)
-def entity_not_found_exception(error):
+def related_entity_not_found_exception(error):
     return http_bad_request(dict(reason=error.__str__()))
 
 
