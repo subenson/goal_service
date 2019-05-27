@@ -71,5 +71,6 @@ class DevGoalInstrumentation(GoalInstrumentation):
         self.logger.log(f'- Progression Edited: {progression.id} '
                         f'(Total: {self.metrics.progressions_edited})')
 
-    def goal_lookup_failed(self, goal_id: str):
-        self.logger.log(f'- Goal Lookup Failed: {goal_id}')
+    def goal_lookup_failed(self, goal_id: str, message: str):
+        self.logger.log(f'- Goal Lookup Failed: {goal_id} '
+                        f'(Exception: {message})')

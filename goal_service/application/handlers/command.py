@@ -77,5 +77,5 @@ class SetSubGoalCommandHandler(FactoryCommandHandler):
             main_goal.set_subgoal(goal)
             self.instrumentation.goal_set(goal)
         except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.main_goal_id)
+            self.instrumentation.goal_lookup_failed(command.main_goal_id, ex)
             raise RelatedEntityNotFoundException
