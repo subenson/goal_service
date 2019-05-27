@@ -3,15 +3,18 @@ from datetime import datetime
 
 from mockito import mock, when, verify
 
-from goal_app.application.handlers.command import AddProgressionCommandHandler, \
-    DiscardProgressionCommandHandler, EditProgressionCommandHandler
-from goal_app.application.instrumentation.goal.instrumentation import \
+from goal_service.application.handlers.command import \
+    AddProgressionCommandHandler, DiscardProgressionCommandHandler, \
+    EditProgressionCommandHandler
+from goal_service.application.instrumentation.goal.instrumentation import \
     GoalInstrumentation
-from goal_app.domain.messages.command import AddProgressionCommand, \
+from goal_service.domain.messages.command import AddProgressionCommand, \
     DiscardProgressionCommand, EditProgressionCommand
-from goal_app.infrastructure.repositories.goal import InMemoryGoalRepository
-from goal_app.domain.models.goal import Goal
-from goal_app.domain.models.progression import Progression, create_progression
+from goal_service.domain.models.goal import Goal
+from goal_service.domain.models.progression import Progression, \
+    create_progression
+from goal_service.infrastructure.repositories.goal import \
+    InMemoryGoalRepository
 
 
 class TestProgressionCommandHandler(unittest.TestCase):

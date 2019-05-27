@@ -1,7 +1,8 @@
-from goal_app.infrastructure.orm.database import database
-from goal_app.application.handlers.command import SetGoalCommandHandler
-from goal_app.domain.messages.command import SetGoalCommand
-from goal_app.infrastructure.repositories.goal import SqlAlchemyGoalRepository
+from goal_service.infrastructure.orm.database import database
+from goal_service.application.handlers.command import SetGoalCommandHandler
+from goal_service.domain.messages.command import SetGoalCommand
+from goal_service.infrastructure.repositories.goal import \
+    SqlAlchemyGoalRepository
 
 
 if __name__ == '__main__':
