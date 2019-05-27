@@ -26,5 +26,5 @@ class SqlAlchemy:
             session.close()
 
 
-database = SqlAlchemy('sqlite:////Users/svendenotter/Code/Python/goal_service'
-                      '/goal_service/infrastructure/test.db')
+database = SqlAlchemy('postgres://goal_service:goal123@localhost:5432'
+                      '/goal_service')

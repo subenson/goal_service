@@ -11,6 +11,7 @@ class Goal(Entity):
         self._description = description
         self._due_date = due_date
         self._progressions = list()
+        self._subgoals = list()
 
     @property
     def completed(self):
@@ -26,6 +27,13 @@ class Goal(Entity):
 
     def add_progression(self, progression: Progression):
         self.progressions.append(progression)
+
+    @property
+    def subgoals(self):
+        return self._subgoals
+
+    def set_subgoal(self, subgoal: "Goal"):
+        self.subgoals.append(subgoal)
 
 
 def create_goal(name, description, due_date):

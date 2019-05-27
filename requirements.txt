@@ -16,3 +16,5 @@ Werkzeug==0.15.1
 zope.interface==4.6.0
 dependency_injector==3.14.6
 mockito==1.1.1
+alembic==1.0.10
+psycopg2-binary==2.8.2

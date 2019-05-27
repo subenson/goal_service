@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 
 from goal_service.application.containers import Queries, Instrumentations
+from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.domain.models.goal import create_goal
 from goal_service.domain.models.progression import create_progression
 from goal_service.domain.models.progression import InvalidPercentageException
@@ -11,10 +12,10 @@ from goal_service.infrastructure.orm import database
 from goal_service.application.handlers.command import SetGoalCommandHandler, \
     CompleteGoalCommandHandler, DiscardGoalCommandHandler, \
     AddProgressionCommandHandler, DiscardProgressionCommandHandler, \
-    EditProgressionCommandHandler
+    EditProgressionCommandHandler, SetSubGoalCommandHandler
 from goal_service.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand, \
-    DiscardProgressionCommand, EditProgressionCommand
+    DiscardProgressionCommand, EditProgressionCommand, SetSubGoalCommand
 from goal_service.domain.models import DiscardedEntityException
 from goal_service.infrastructure.repositories.progression import \
     SqlAlchemyProgressionRepository
@@ -37,6 +38,11 @@ def entity_not_found_exception(error):
     return http_not_found(dict(reason=error.__str__()))
 
 
+@app.errorhandler(RelatedEntityNotFoundException)
+def entity_not_found_exception(error):
+    return http_bad_request(dict(reason=error.__str__()))
+
+
 def http_ok(body={}, headers=None):
     return jsonify(body), 200, headers
 
@@ -51,6 +57,10 @@ def http_conflict(body={}, headers=None):
 
 def http_not_found(body={}, headers=None):
     return jsonify(body), 404, headers
+
+
+def http_bad_request(body={}, headers=None):
+    return jsonify(body), 400, headers
 
 
 @app.route('/', methods=['GET'])
@@ -159,3 +169,25 @@ def edit_progression(goal_id, progression_id):
             instrumentation=Instrumentations.goal())
         handler(command)
         return http_no_content()
+
+
+@app.route('/goals/<goal_id>/subgoals', methods=['GET'])
+def list_subgoals(goal_id):
+    open_goals_query = Queries.list_open_goals()
+    return http_ok(open_goals_query(goal_id))
+
+
+@app.route('/goals/<goal_id>/subgoals', methods=['POST'])
+def set_subgoal(goal_id):
+    goal_json = request.get_json()
+    goal_json['main_goal_id'] = goal_id
+    command = SetSubGoalCommand(**goal_json)
+
+    with database.unit_of_work() as session:
+        repository = SqlAlchemyGoalRepository(session)
+        handler = SetSubGoalCommandHandler(  # To-do: IoC
+            factory=create_goal,
+            repository=repository,
+            instrumentation=Instrumentations.goal())
+        handler(command)
+    return http_no_content()

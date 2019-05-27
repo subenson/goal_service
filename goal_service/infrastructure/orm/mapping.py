@@ -10,9 +10,11 @@ mapper(Goal, GOAL_TABLE, properties={
     '_name': GOAL_TABLE.c.name,
     '_description': GOAL_TABLE.c.description,
     '_due_date': GOAL_TABLE.c.due_date,
+    '_main_goal_id': GOAL_TABLE.c.main_goal_id,
     '_completed': GOAL_TABLE.c.completed,
     '_discarded': GOAL_TABLE.c.discarded,
-    'progressions': relationship(Progression)})
+    'progressions': relationship(Progression),
+    'subgoals': relationship(Goal)})
 
 mapper(Progression, GOAL_PROGRESSION_TABLE, properties={
     '_id': GOAL_PROGRESSION_TABLE.c.id,

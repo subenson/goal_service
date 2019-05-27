@@ -8,6 +8,7 @@ GOAL_TABLE = Table('goal', database.metadata,
     Column('name', String),
     Column('description', String),
     Column('due_date', DateTime(timezone=True)),
+    Column('main_goal_id', String(36), ForeignKey("goal.id")),
     Column('completed', Boolean),
     Column('discarded', Boolean))
 

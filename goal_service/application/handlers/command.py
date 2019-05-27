@@ -1,6 +1,8 @@
+from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.domain.messages.command import SetGoalCommand, \
     CompleteGoalCommand, DiscardGoalCommand, AddProgressionCommand, \
-    DiscardProgressionCommand, EditProgressionCommand
+    DiscardProgressionCommand, EditProgressionCommand, SetSubGoalCommand
+from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
 class CommandHandler:
@@ -62,3 +64,18 @@ class EditProgressionCommandHandler(CommandHandler):
         progression.note = command.note
         progression.percentage = command.percentage
         self.instrumentation.edit_progression(progression)
+
+
+class SetSubGoalCommandHandler(FactoryCommandHandler):
+    def __call__(self, command: SetSubGoalCommand):
+        try:
+            goal = self.factory(
+                name=command.name,
+                description=command.description,
+                due_date=command.due_date)
+            main_goal = self.repository.get(command.main_goal_id)
+            main_goal.set_subgoal(goal)
+            self.instrumentation.goal_set(goal)
+        except EntityNotFoundException as ex:
+            self.instrumentation.goal_lookup_failed(command.main_goal_id)
+            raise RelatedEntityNotFoundException

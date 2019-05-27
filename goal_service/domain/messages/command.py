@@ -31,3 +31,10 @@ class EditProgressionCommand(NamedTuple):
     id: uuid.uuid4
     note: str
     percentage: int
+
+
+class SetSubGoalCommand(NamedTuple):
+    name: str
+    description: str
+    due_date: datetime
+    main_goal_id: str
