@@ -43,24 +43,24 @@ def related_entity_not_found_exception(error):
     return http_bad_request(dict(reason=error.__str__()))
 
 
-def http_ok(body={}, headers=None):
-    return jsonify(body), 200, headers
+def http_ok(body=None, headers=None):
+    return jsonify(body or {}), 200, headers
 
 
 def http_no_content(headers=None):
     return "", 204, headers
 
 
-def http_conflict(body={}, headers=None):
-    return jsonify(body), 409, headers
+def http_conflict(body=None, headers=None):
+    return jsonify(body or {}), 409, headers
 
 
-def http_not_found(body={}, headers=None):
-    return jsonify(body), 404, headers
+def http_not_found(body=None, headers=None):
+    return jsonify(body or {}), 404, headers
 
 
-def http_bad_request(body={}, headers=None):
-    return jsonify(body), 400, headers
+def http_bad_request(body=None, headers=None):
+    return jsonify(body or {}), 400, headers
 
 
 @app.route('/', methods=['GET'])
