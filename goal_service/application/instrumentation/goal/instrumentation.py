@@ -79,4 +79,4 @@ class DevGoalInstrumentation(GoalInstrumentation):
         self.logger.log(f'- Goal Lookup Failed: {goal_id}')
 
     def progression_lookup_failed(self, progression_id: str):
-        self.logger.log(f'- Progression Lookup Failed: {goal_id}')
+        self.logger.log(f'- Progression Lookup Failed: {progression_id}')
