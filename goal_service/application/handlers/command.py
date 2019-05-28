@@ -30,52 +30,72 @@ class SetGoalCommandHandler(FactoryCommandHandler):
 
 class CompleteGoalCommandHandler(CommandHandler):
     def __call__(self, command: CompleteGoalCommand):
-        goal = self.repository.get(command.id)
-        goal.complete()
-        self.instrumentation.goal_completed(goal)
+        try:
+            goal = self.repository.get(command.id)
+            goal.complete()
+            self.instrumentation.goal_completed(goal)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.id)
+            raise RelatedEntityNotFoundException
 
 
 class DiscardGoalCommandHandler(CommandHandler):
     def __call__(self, command: DiscardGoalCommand):
-        goal = self.repository.get(command.id)
-        goal.discard()
-        self.instrumentation.goal_discarded(goal)
+        try:
+            goal = self.repository.get(command.id)
+            goal.discard()
+            self.instrumentation.goal_discarded(goal)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.id)
+            raise RelatedEntityNotFoundException
 
 
 class AddProgressionCommandHandler(FactoryCommandHandler):
     def __call__(self, command: AddProgressionCommand):
-        goal = self.repository.get(command.goal_id)
-        progression = self.factory(note=command.note,
-                                   percentage=command.percentage)
-        goal.add_progression(progression)
-        self.instrumentation.add_progression(goal)
+        try:
+            goal = self.repository.get(command.goal_id)
+            progression = self.factory(note=command.note,
+                                       percentage=command.percentage)
+            goal.add_progression(progression)
+            self.instrumentation.add_progression(goal)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.goal_id)
+            raise RelatedEntityNotFoundException
 
 
 class DiscardProgressionCommandHandler(CommandHandler):
     def __call__(self, command: DiscardProgressionCommand):
-        progression = self.repository.get(command.id)
-        progression.discard()
-        self.instrumentation.discard_progression(progression)
+        try:
+            progression = self.repository.get(command.id)
+            progression.discard()
+            self.instrumentation.discard_progression(progression)
+        except EntityNotFoundException:
+            self.instrumentation.progression_lookup_failed(command.id)
+            raise EntityNotFoundException
 
 
 class EditProgressionCommandHandler(CommandHandler):
     def __call__(self, command: EditProgressionCommand):
-        progression = self.repository.get(command.id)
-        progression.note = command.note
-        progression.percentage = command.percentage
-        self.instrumentation.edit_progression(progression)
+        try:
+            progression = self.repository.get(command.id)
+            progression.note = command.note
+            progression.percentage = command.percentage
+            self.instrumentation.edit_progression(progression)
+        except EntityNotFoundException:
+            self.instrumentation.progression_lookup_failed(command.id)
+            raise EntityNotFoundException
 
 
 class SetSubGoalCommandHandler(FactoryCommandHandler):
     def __call__(self, command: SetSubGoalCommand):
         try:
+            main_goal = self.repository.get(command.main_goal_id)
             goal = self.factory(
                 name=command.name,
                 description=command.description,
                 due_date=command.due_date)
-            main_goal = self.repository.get(command.main_goal_id)
             main_goal.set_subgoal(goal)
             self.instrumentation.goal_set(goal)
-        except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.main_goal_id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.main_goal_id)
             raise RelatedEntityNotFoundException
