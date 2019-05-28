@@ -31,11 +31,11 @@ class GoalInstrumentation(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def goal_lookup_failed(self, goal_id: str, message: str):
+    def goal_lookup_failed(self, goal_id: str):
         raise NotImplementedError
 
     @abstractmethod
-    def progression_lookup_failed(self, progression_id: str, message: str):
+    def progression_lookup_failed(self, progression_id: str):
         raise NotImplementedError
 
 
@@ -75,10 +75,8 @@ class DevGoalInstrumentation(GoalInstrumentation):
         self.logger.log(f'- Progression Edited: {progression.id} '
                         f'(Total: {self.metrics.progressions_edited})')
 
-    def goal_lookup_failed(self, goal_id: str, message: str):
-        self.logger.log(f'- Goal Lookup Failed: {goal_id} '
-                        f'(Exception: {message})')
+    def goal_lookup_failed(self, goal_id: str):
+        self.logger.log(f'- Goal Lookup Failed: {goal_id}')
 
-    def progression_lookup_failed(self, progression_id: str, message: str):
-        self.logger.log(f'- Progression Lookup Failed: {goal_id} '
-                        f'(Exception: {message})')
+    def progression_lookup_failed(self, progression_id: str):
+        self.logger.log(f'- Progression Lookup Failed: {goal_id}')

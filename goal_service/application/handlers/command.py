@@ -34,8 +34,8 @@ class CompleteGoalCommandHandler(CommandHandler):
             goal = self.repository.get(command.id)
             goal.complete()
             self.instrumentation.goal_completed(goal)
-        except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.id)
             raise RelatedEntityNotFoundException
 
 
@@ -45,8 +45,8 @@ class DiscardGoalCommandHandler(CommandHandler):
             goal = self.repository.get(command.id)
             goal.discard()
             self.instrumentation.goal_discarded(goal)
-        except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.id)
             raise RelatedEntityNotFoundException
 
 
@@ -58,8 +58,8 @@ class AddProgressionCommandHandler(FactoryCommandHandler):
                                        percentage=command.percentage)
             goal.add_progression(progression)
             self.instrumentation.add_progression(goal)
-        except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.goal_id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.goal_id)
             raise RelatedEntityNotFoundException
 
 
@@ -69,8 +69,8 @@ class DiscardProgressionCommandHandler(CommandHandler):
             progression = self.repository.get(command.id)
             progression.discard()
             self.instrumentation.discard_progression(progression)
-        except EntityNotFoundException as ex:
-            self.instrumentation.progression_lookup_failed(command.id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.progression_lookup_failed(command.id)
             raise EntityNotFoundException
 
 
@@ -92,6 +92,6 @@ class SetSubGoalCommandHandler(FactoryCommandHandler):
             main_goal = self.repository.get(command.main_goal_id)
             main_goal.set_subgoal(goal)
             self.instrumentation.goal_set(goal)
-        except EntityNotFoundException as ex:
-            self.instrumentation.goal_lookup_failed(command.main_goal_id, ex)
+        except EntityNotFoundException:
+            self.instrumentation.goal_lookup_failed(command.main_goal_id)
             raise RelatedEntityNotFoundException

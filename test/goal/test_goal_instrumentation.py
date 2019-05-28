@@ -77,7 +77,7 @@ class TestGoalInstrumentation(unittest.TestCase):
             handler(command)
 
         verify(self.instrumentation, times=1).goal_lookup_failed(
-            self.A_GOAL_ID, ...)
+            self.A_GOAL_ID)
 
     def test_discard_goal_lookup_failed_instrumentation(self):
         # Given
@@ -94,4 +94,4 @@ class TestGoalInstrumentation(unittest.TestCase):
             handler(command)
 
         verify(self.instrumentation, times=1).goal_lookup_failed(
-            self.A_GOAL_ID, ...)
+            self.A_GOAL_ID)

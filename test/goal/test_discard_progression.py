@@ -88,4 +88,4 @@ class TestDiscardProgression(unittest.TestCase):
             handler(command)
 
         verify(self.instrument, times=1).progression_lookup_failed(
-            self.A_PROGRESSION_ID, ...)
+            self.A_PROGRESSION_ID)

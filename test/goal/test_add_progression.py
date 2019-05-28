@@ -86,4 +86,4 @@ class TestAddProgression(unittest.TestCase):
             handler(command)
 
         verify(self.instrument, times=1).goal_lookup_failed(
-            self.A_GOAL_ID, ...)
+            self.A_GOAL_ID)
