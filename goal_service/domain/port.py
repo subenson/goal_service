@@ -10,7 +10,7 @@ class Repository(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get(self, entity: Entity) -> Entity:
+    def get(self, id_: str) -> Entity:
         pass
 
     @abstractmethod

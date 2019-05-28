@@ -9,10 +9,10 @@ class InMemoryGoalRepository(Repository):
     def __init__(self):
         self._registry = list()
 
-    def add(self, goal: Goal) -> None:
-        self._registry.append(goal)
+    def add(self, entity: Goal) -> None:
+        self._registry.append(entity)
 
-    def get(self, id_) -> Goal:
+    def get(self, id_: str) -> Goal:
         for goal in self._registry:
             if goal.id == id_:
                 return goal
@@ -27,10 +27,10 @@ class SqlAlchemyGoalRepository(Repository):
     def __init__(self, session: Session):
         self._session = session
 
-    def add(self, goal: Goal) -> None:
-        self._session.add(goal)
+    def add(self, entity: Goal) -> None:
+        self._session.add(entity)
 
-    def get(self, id_) -> Goal:
+    def get(self, id_: str) -> Goal:
         goal = self._session.query(Goal).get(id_)
         if goal:
             return goal
@@ -38,5 +38,3 @@ class SqlAlchemyGoalRepository(Repository):
 
     def __len__(self) -> int:
         return self._session.query(Goal).count()
-
-
