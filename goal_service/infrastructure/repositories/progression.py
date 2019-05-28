@@ -10,10 +10,10 @@ class InMemoryProgressionRepository(Repository):
     def __init__(self):
         self._registry = list()
 
-    def add(self, progression: Progression) -> None:
+    def add(self, entity: Progression) -> None:
         raise Exception("Unable to add progressions directly in the database.")
 
-    def get(self, id_) -> Progression:
+    def get(self, id_: str) -> Progression:
         for progression in self._registry:
             if progression.id == id_:
                 return progression
@@ -28,10 +28,10 @@ class SqlAlchemyProgressionRepository(Repository):
     def __init__(self, session: Session):
         self._session = session
 
-    def add(self, progression: Progression) -> None:
+    def add(self, entity: Progression) -> None:
         raise Exception("Unable to add progressions directly in the database.")
 
-    def get(self, id_) -> Progression:
+    def get(self, id_: str) -> Progression:
         progression = self._session.query(Progression).get(id_)
         if progression:
             return progression
