@@ -13,9 +13,10 @@ class Progression(Entity):
 
     def __init__(self, note, percentage):
         super().__init__()
-        self.note = note
-        self.percentage = percentage
+        self._note = note
+        self._percentage = None
         self._datetime = datetime.now()
+        self.percentage = percentage  # Use setter
 
     @property
     def note(self) -> str:
