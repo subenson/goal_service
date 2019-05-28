@@ -25,6 +25,7 @@ class Goal(Entity):
     def progressions(self):
         return self._progressions
 
+    @check_not_discarded
     def add_progression(self, progression: Progression):
         self.progressions.append(progression)
 
@@ -32,6 +33,7 @@ class Goal(Entity):
     def subgoals(self):
         return self._subgoals
 
+    @check_not_discarded
     def set_subgoal(self, subgoal: "Goal"):
         self.subgoals.append(subgoal)
 

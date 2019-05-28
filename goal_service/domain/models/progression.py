@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from goal_service.domain.models import Entity
+from goal_service.domain.models import Entity, check_not_discarded
 
 
 class InvalidPercentageException(Exception):
@@ -23,6 +23,7 @@ class Progression(Entity):
         return self._note
 
     @note.setter
+    @check_not_discarded
     def note(self, note: str):
         self._note = note
 
@@ -31,6 +32,7 @@ class Progression(Entity):
         return self._percentage
 
     @percentage.setter
+    @check_not_discarded
     def percentage(self, percentage: int):
         if not 0 <= percentage <= 100:
             raise InvalidPercentageException()

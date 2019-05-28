@@ -10,7 +10,7 @@ class DiscardedEntityException(Exception):
 def check_not_discarded(func):
     def wrapper(*args):
         obj = args[0]
-        if hasattr(obj, '_discarded') and obj.discarded:
+        if hasattr(obj, 'discarded') and obj.discarded:
             raise DiscardedEntityException
         return func(*args)
     return wrapper
