@@ -89,11 +89,11 @@ class EditProgressionCommandHandler(CommandHandler):
 class SetSubGoalCommandHandler(FactoryCommandHandler):
     def __call__(self, command: SetSubGoalCommand):
         try:
+            main_goal = self.repository.get(command.main_goal_id)
             goal = self.factory(
                 name=command.name,
                 description=command.description,
                 due_date=command.due_date)
-            main_goal = self.repository.get(command.main_goal_id)
             main_goal.set_subgoal(goal)
             self.instrumentation.goal_set(goal)
         except EntityNotFoundException:
