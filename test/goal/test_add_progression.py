@@ -15,7 +15,7 @@ from goal_service.domain.port import Repository
 from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
-class TestGoalInstrumentation(unittest.TestCase):
+class TestAddProgression(unittest.TestCase):
 
     A_GOAL_ID = "12345678-1234-5678-9012-123456789012"
     A_GOAL = mock({
