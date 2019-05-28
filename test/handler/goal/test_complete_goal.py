@@ -6,7 +6,7 @@ from mockito import mock, when, verify
 from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.application.handlers.command import \
     CompleteGoalCommandHandler
-from goal_service.application.instrumentation.goal.instrumentation import \
+from goal_service.application.instrumentation.goal.interface import \
     GoalInstrumentation
 from goal_service.domain.messages.command import CompleteGoalCommand
 from goal_service.domain.models import DiscardedEntityException

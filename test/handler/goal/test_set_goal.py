@@ -4,7 +4,7 @@ from datetime import datetime
 from mockito import mock, when, verify
 
 from goal_service.application.handlers.command import SetGoalCommandHandler
-from goal_service.application.instrumentation.goal.instrumentation import \
+from goal_service.application.instrumentation.goal.interface import \
     GoalInstrumentation
 from goal_service.domain.messages.command import SetGoalCommand
 from goal_service.domain.models.goal import Goal, create_goal

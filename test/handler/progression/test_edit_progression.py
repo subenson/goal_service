@@ -5,8 +5,8 @@ from mockito import mock, when, verify
 
 from goal_service.application.handlers.command import \
     EditProgressionCommandHandler
-from goal_service.application.instrumentation.goal.instrumentation import \
-    GoalInstrumentation
+from goal_service.application.instrumentation.progression.interface import \
+    ProgressionInstrumentation
 from goal_service.domain.messages.command import EditProgressionCommand
 from goal_service.domain.models.goal import Goal
 from goal_service.domain.models.progression import Progression, \
@@ -52,7 +52,7 @@ class TestProgressionCommandHandler(unittest.TestCase):
     def setUp(self):
         self.factory = mock(create_progression)
         self.repository = mock(Repository)
-        self.instrument = mock(GoalInstrumentation)
+        self.instrument = mock(ProgressionInstrumentation)
 
         when(self.instrument).edit_progression(
             self.A_PROGRESSION).thenReturn(None)

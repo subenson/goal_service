@@ -15,18 +15,6 @@ class GoalMetrics(ABC):
     def goal_discarded(self):
         raise NotImplementedError
 
-    @abstractmethod
-    def progression_added(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def progression_discarded(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def progression_edited(self):
-        raise NotImplementedError
-
 
 class InMemoryGoalMetrics(GoalMetrics):
 
@@ -34,9 +22,6 @@ class InMemoryGoalMetrics(GoalMetrics):
         self.goals_set = 0
         self.goals_completed = 0
         self.goals_discarded = 0
-        self.progressions_added = 0
-        self.progressions_discarded = 0
-        self.progressions_edited = 0
 
     def goal_set(self):
         self.goals_set += 1
@@ -46,12 +31,3 @@ class InMemoryGoalMetrics(GoalMetrics):
 
     def goal_discarded(self):
         self.goals_discarded += 1
-
-    def progression_added(self):
-        self.progressions_added += 1
-
-    def progression_discarded(self):
-        self.progressions_discarded += 1
-
-    def progression_edited(self):
-        self.progressions_edited += 1

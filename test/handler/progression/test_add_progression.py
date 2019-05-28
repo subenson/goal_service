@@ -5,8 +5,8 @@ from mockito import mock, when, verify
 from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.application.handlers.command import \
     AddProgressionCommandHandler
-from goal_service.application.instrumentation.goal.instrumentation import \
-    GoalInstrumentation
+from goal_service.application.instrumentation.progression.interface import \
+    ProgressionInstrumentation
 from goal_service.domain.messages.command import AddProgressionCommand
 from goal_service.domain.models.goal import Goal
 from goal_service.domain.models.progression import create_progression, \
@@ -38,7 +38,7 @@ class TestAddProgression(unittest.TestCase):
     def setUp(self):
         self.factory = mock(create_progression)
         self.repository = mock(Repository)
-        self.instrument = mock(GoalInstrumentation)
+        self.instrument = mock(ProgressionInstrumentation)
 
         when(self.factory).__call__(**self.A_PROGRESSION_JSON).thenReturn(
             self.A_PROGRESSION)

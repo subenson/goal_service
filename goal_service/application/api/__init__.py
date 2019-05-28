@@ -1,7 +1,7 @@
 # pylint: disable=unused-argument
 from flask import Flask, request, jsonify
 
-from goal_service.application.containers import Queries, Instrumentations
+from goal_service.application.containers import Queries, Instrumentation
 from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.domain.models.goal import create_goal
 from goal_service.domain.models.progression import create_progression
@@ -78,7 +78,7 @@ def set_goal():
         handler = SetGoalCommandHandler(  # To-do: IoC
             factory=create_goal,
             repository=repository,
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.goal())
         handler(command)
 
     return http_no_content()
@@ -92,7 +92,7 @@ def complete_goal(id_):
         repository = SqlAlchemyGoalRepository(session)
         handler = CompleteGoalCommandHandler(
             repository=repository,  # To-do: IoC
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.goal())
         handler(command)
         return http_no_content()
 
@@ -105,7 +105,7 @@ def discard_goal(id_):
         repository = SqlAlchemyGoalRepository(session)
         handler = DiscardGoalCommandHandler(
             repository=repository,  # To-do: IoC
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.goal())
         handler(command)
         return http_no_content()
 
@@ -135,7 +135,7 @@ def add_progression(goal_id):
         handler = AddProgressionCommandHandler(
             factory=create_progression,
             repository=repository,
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.progression())
         handler(command)
         return http_no_content()
 
@@ -149,7 +149,7 @@ def discard_progression(goal_id, progression_id):
         repository = SqlAlchemyProgressionRepository(session)
         handler = DiscardProgressionCommandHandler(
             repository=repository,  # To-do: IoC
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.progression())
         handler(command)
         return http_no_content()
 
@@ -167,7 +167,7 @@ def edit_progression(goal_id, progression_id):
         repository = SqlAlchemyProgressionRepository(session)
         handler = EditProgressionCommandHandler(
             repository=repository,  # To-do: IoC
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.progression())
         handler(command)
         return http_no_content()
 
@@ -189,6 +189,6 @@ def set_subgoal(goal_id):
         handler = SetSubGoalCommandHandler(  # To-do: IoC
             factory=create_goal,
             repository=repository,
-            instrumentation=Instrumentations.goal())
+            instrumentation=Instrumentation.goal())
         handler(command)
     return http_no_content()
