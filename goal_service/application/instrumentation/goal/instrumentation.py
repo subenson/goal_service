@@ -31,7 +31,7 @@ class GoalInstrumentation(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def goal_lookup_failed(self, goal_id: str):
+    def goal_lookup_failed(self, goal_id: str, message: str):
         raise NotImplementedError
 
 
