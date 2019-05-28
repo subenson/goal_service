@@ -1,3 +1,4 @@
+# pylint: disable=unused-argument
 from flask import Flask, request, jsonify
 
 from goal_service.application.containers import Queries, Instrumentations
