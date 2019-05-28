@@ -65,9 +65,13 @@ class AddProgressionCommandHandler(FactoryCommandHandler):
 
 class DiscardProgressionCommandHandler(CommandHandler):
     def __call__(self, command: DiscardProgressionCommand):
-        progression = self.repository.get(command.id)
-        progression.discard()
-        self.instrumentation.discard_progression(progression)
+        try:
+            progression = self.repository.get(command.id)
+            progression.discard()
+            self.instrumentation.discard_progression(progression)
+        except EntityNotFoundException as ex:
+            self.instrumentation.progression_lookup_failed(command.id, ex)
+            raise EntityNotFoundException
 
 
 class EditProgressionCommandHandler(CommandHandler):
