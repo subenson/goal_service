@@ -52,11 +52,15 @@ class DiscardGoalCommandHandler(CommandHandler):
 
 class AddProgressionCommandHandler(FactoryCommandHandler):
     def __call__(self, command: AddProgressionCommand):
-        goal = self.repository.get(command.goal_id)
-        progression = self.factory(note=command.note,
-                                   percentage=command.percentage)
-        goal.add_progression(progression)
-        self.instrumentation.add_progression(goal)
+        try:
+            goal = self.repository.get(command.goal_id)
+            progression = self.factory(note=command.note,
+                                       percentage=command.percentage)
+            goal.add_progression(progression)
+            self.instrumentation.add_progression(goal)
+        except EntityNotFoundException as ex:
+            self.instrumentation.goal_lookup_failed(command.goal_id, ex)
+            raise RelatedEntityNotFoundException
 
 
 class DiscardProgressionCommandHandler(CommandHandler):
