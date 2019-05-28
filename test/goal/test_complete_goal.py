@@ -3,6 +3,7 @@ from datetime import datetime
 
 from mockito import mock, when, verify
 
+from goal_service.application.handlers import RelatedEntityNotFoundException
 from goal_service.application.handlers.command import \
     CompleteGoalCommandHandler
 from goal_service.application.instrumentation.goal.instrumentation import \
@@ -11,6 +12,7 @@ from goal_service.domain.messages.command import CompleteGoalCommand
 from goal_service.domain.models import DiscardedEntityException
 from goal_service.domain.models.goal import Goal
 from goal_service.domain.port import Repository
+from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
 class TestGoalCommandHandler(unittest.TestCase):
@@ -39,7 +41,6 @@ class TestGoalCommandHandler(unittest.TestCase):
         self.repository = mock(Repository)
         self.instrument = mock(GoalInstrumentation)
 
-        when(self.instrument).goal_completed(self.A_GOAL).thenReturn(None)
         when(self.A_GOAL).complete().thenReturn(None)
 
     def test_complete_goal(self):
@@ -47,6 +48,7 @@ class TestGoalCommandHandler(unittest.TestCase):
         command = CompleteGoalCommand(id=self.A_GOAL_ID)
 
         when(self.repository).get(self.A_GOAL_ID).thenReturn(self.A_GOAL)
+        when(self.instrument).goal_completed(self.A_GOAL).thenReturn(None)
 
         # When
         handler = CompleteGoalCommandHandler(
@@ -74,3 +76,22 @@ class TestGoalCommandHandler(unittest.TestCase):
                 repository=self.repository,
                 instrumentation=self.instrument)
             handler(command)
+
+    def test_complete_goal_lookup_failed(self):
+        # Given
+        command = CompleteGoalCommand(id=self.A_GOAL_ID)
+
+        when(self.repository).get(self.A_GOAL_ID).thenRaise(
+            EntityNotFoundException)
+        when(self.instrument).goal_lookup_failed(self.A_GOAL_ID).thenReturn(
+            None)
+
+        # When
+        with self.assertRaises(RelatedEntityNotFoundException):
+            handler = CompleteGoalCommandHandler(
+                repository=self.repository,
+                instrumentation=self.instrument)
+            handler(command)
+
+        verify(self.instrument, times=1).goal_lookup_failed(
+            self.A_GOAL_ID)
