@@ -30,16 +30,24 @@ class SetGoalCommandHandler(FactoryCommandHandler):
 
 class CompleteGoalCommandHandler(CommandHandler):
     def __call__(self, command: CompleteGoalCommand):
-        goal = self.repository.get(command.id)
-        goal.complete()
-        self.instrumentation.goal_completed(goal)
+        try:
+            goal = self.repository.get(command.id)
+            goal.complete()
+            self.instrumentation.goal_completed(goal)
+        except EntityNotFoundException as ex:
+            self.instrumentation.goal_lookup_failed(command.id, ex)
+            raise RelatedEntityNotFoundException
 
 
 class DiscardGoalCommandHandler(CommandHandler):
     def __call__(self, command: DiscardGoalCommand):
-        goal = self.repository.get(command.id)
-        goal.discard()
-        self.instrumentation.goal_discarded(goal)
+        try:
+            goal = self.repository.get(command.id)
+            goal.discard()
+            self.instrumentation.goal_discarded(goal)
+        except EntityNotFoundException as ex:
+            self.instrumentation.goal_lookup_failed(command.id, ex)
+            raise RelatedEntityNotFoundException
 
 
 class AddProgressionCommandHandler(FactoryCommandHandler):

@@ -3,12 +3,16 @@ from datetime import datetime
 
 from mockito import mock, when, verify
 
-from goal_service.application.handlers.command import SetGoalCommandHandler
+from goal_service.application.handlers import RelatedEntityNotFoundException
+from goal_service.application.handlers.command import SetGoalCommandHandler, \
+    CompleteGoalCommandHandler, DiscardGoalCommandHandler
 from goal_service.application.instrumentation.goal.instrumentation import \
     GoalInstrumentation
-from goal_service.domain.messages.command import SetGoalCommand
+from goal_service.domain.messages.command import SetGoalCommand, \
+    CompleteGoalCommand, DiscardGoalCommand
 from goal_service.domain.models.goal import Goal, create_goal
 from goal_service.domain.port import Repository
+from goal_service.infrastructure.repositories import EntityNotFoundException
 
 
 class TestGoalInstrumentation(unittest.TestCase):
@@ -39,6 +43,7 @@ class TestGoalInstrumentation(unittest.TestCase):
         when(self.factory).__call__(**self.A_GOAL_JSON).thenReturn(self.A_GOAL)
         when(self.repository).add(self.A_GOAL).thenReturn(None)
         when(self.instrumentation).goal_set(self.A_GOAL).thenReturn(None)
+        when(self.instrumentation).goal_lookup_failed(...).thenReturn(None)
 
     def test_goal_set_instrumentation(self):
         # Given
@@ -56,3 +61,37 @@ class TestGoalInstrumentation(unittest.TestCase):
 
         # Then
         verify(self.instrumentation, times=1).goal_set(self.A_GOAL)
+
+    def test_complete_goal_lookup_failed_instrumentation(self):
+        # Given
+        command = CompleteGoalCommand(id=self.A_GOAL_ID)
+
+        when(self.repository).get(self.A_GOAL_ID).thenRaise(
+            EntityNotFoundException)
+
+        # When
+        with self.assertRaises(RelatedEntityNotFoundException):
+            handler = CompleteGoalCommandHandler(
+                repository=self.repository,
+                instrumentation=self.instrumentation)
+            handler(command)
+
+        verify(self.instrumentation, times=1).goal_lookup_failed(
+            self.A_GOAL_ID, ...)
+
+    def test_discard_goal_lookup_failed_instrumentation(self):
+        # Given
+        command = DiscardGoalCommand(id=self.A_GOAL_ID)
+
+        when(self.repository).get(self.A_GOAL_ID).thenRaise(
+            EntityNotFoundException)
+
+        # When
+        with self.assertRaises(RelatedEntityNotFoundException):
+            handler = DiscardGoalCommandHandler(
+                repository=self.repository,
+                instrumentation=self.instrumentation)
+            handler(command)
+
+        verify(self.instrumentation, times=1).goal_lookup_failed(
+            self.A_GOAL_ID, ...)
