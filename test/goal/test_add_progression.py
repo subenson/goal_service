@@ -47,13 +47,13 @@ class TestAddProgression(unittest.TestCase):
         when(self.instrument).goal_lookup_failed(...).thenReturn(None)
 
     def test_add_progression(self):
-        when(self.repository).get(self.A_GOAL_ID).thenReturn(self.A_GOAL)
-
         # Given
         command = AddProgressionCommand(
             goal_id=self.A_GOAL_ID,
             note=self.A_PROGRESSION_NOTE,
             percentage=self.A_PROGRESSION_PERCENTAGE)
+
+        when(self.repository).get(self.A_GOAL_ID).thenReturn(self.A_GOAL)
 
         # When
         handler = AddProgressionCommandHandler(
@@ -65,24 +65,6 @@ class TestAddProgression(unittest.TestCase):
         # Then
         verify(self.A_GOAL, times=1).add_progression(self.A_PROGRESSION)
         verify(self.factory, times=1).__call__(**self.A_PROGRESSION_JSON)
-
-    def test_add_progression_instrumentation(self):
-        # Given
-        command = AddProgressionCommand(
-            goal_id=self.A_GOAL_ID,
-            note=self.A_PROGRESSION_NOTE,
-            percentage=self.A_PROGRESSION_PERCENTAGE)
-
-        when(self.repository).get(self.A_GOAL_ID).thenReturn(self.A_GOAL)
-
-        # When
-        handler = AddProgressionCommandHandler(
-            factory=self.factory,
-            repository=self.repository,
-            instrumentation=self.instrument)
-        handler(command)
-
-        # Then
         verify(self.instrument, times=1).add_progression(self.A_GOAL)
 
     def test_add_progression_goal_lookup_failed_instrumentation(self):
