@@ -76,10 +76,14 @@ class DiscardProgressionCommandHandler(CommandHandler):
 
 class EditProgressionCommandHandler(CommandHandler):
     def __call__(self, command: EditProgressionCommand):
-        progression = self.repository.get(command.id)
-        progression.note = command.note
-        progression.percentage = command.percentage
-        self.instrumentation.edit_progression(progression)
+        try:
+            progression = self.repository.get(command.id)
+            progression.note = command.note
+            progression.percentage = command.percentage
+            self.instrumentation.edit_progression(progression)
+        except EntityNotFoundException:
+            self.instrumentation.progression_lookup_failed(command.id)
+            raise EntityNotFoundException
 
 
 class SetSubGoalCommandHandler(FactoryCommandHandler):
