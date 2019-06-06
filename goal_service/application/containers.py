@@ -1,5 +1,6 @@
 from dependency_injector import providers, containers
 
+from goal_service.application.config import Config
 from goal_service.application.handlers.query import ListOpenGoalsQuery, \
     ListProgressionsQuery
 from goal_service.application.instrumentation.goal.development import \
@@ -16,6 +17,7 @@ from goal_service.infrastructure.orm import database
 
 class Core(containers.DeclarativeContainer):
     session = database.session()
+    config = Config('config.yaml')
 
 
 class Queries(containers.DeclarativeContainer):
