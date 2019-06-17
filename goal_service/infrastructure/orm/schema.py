@@ -1,10 +1,10 @@
 # pylint: disable=bad-continuation
 from sqlalchemy import Table, Column, String, DateTime, Boolean, Integer, \
     ForeignKey
-from . import database
 
+from goal_service.application.containers.database import Database
 
-GOAL_TABLE = Table('goal', database.metadata,
+GOAL_TABLE = Table('goal', Database.default.metadata,
     Column('id', String(36), primary_key=True),
     Column('name', String),
     Column('description', String),
@@ -13,9 +13,7 @@ GOAL_TABLE = Table('goal', database.metadata,
     Column('completed', Boolean),
     Column('discarded', Boolean))
 
-GOAL_PROGRESSION_TABLE = Table(
-    'goal_progression',
-    database.metadata,
+GOAL_PROGRESSION_TABLE = Table('goal_progression', Database.default.metadata,
     Column('id', String(36), primary_key=True),
     Column('note', String),
     Column('percentage', Integer),

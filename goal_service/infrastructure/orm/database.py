@@ -7,8 +7,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 class SqlAlchemy:
 
-    def __init__(self, uri):
-        self.engine = create_engine(uri)
+    def __init__(self, driver, user, password, host, port, database):
+        self.engine = create_engine(
+            f"{driver}://{user}:{password}@{host}:{port}/{database}")
         self.session_factory = scoped_session(sessionmaker(self.engine), )
         self.metadata = MetaData(self.engine)
 
@@ -24,7 +25,3 @@ class SqlAlchemy:
         except SQLAlchemyError:
             session.rollback()
             session.close()
-
-
-database = SqlAlchemy('postgres://goal_service:goal123@localhost:5432'
-                      '/goal_service')
