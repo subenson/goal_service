@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine, MetaData
@@ -5,10 +6,26 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 
-class SqlAlchemy:
+class ORM(metaclass=ABCMeta):
 
-    def __init__(self, uri):
-        self.engine = create_engine(uri)
+    @abstractmethod
+    def __init__(self, driver, user, password, host, port, database):
+        raise NotImplementedError
+
+    @abstractmethod
+    def session(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def unit_of_work(self):
+        raise NotImplementedError
+
+
+class SqlAlchemy(ORM):
+
+    def __init__(self, driver, user, password, host, port, database):
+        self.engine = create_engine(
+            f"{driver}://{user}:{password}@{host}:{port}/{database}")
         self.session_factory = scoped_session(sessionmaker(self.engine), )
         self.metadata = MetaData(self.engine)
 
@@ -24,7 +41,3 @@ class SqlAlchemy:
         except SQLAlchemyError:
             session.rollback()
             session.close()
-
-
-database = SqlAlchemy('postgres://goal_service:goal123@localhost:5432'
-                      '/goal_service')
