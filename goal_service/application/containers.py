@@ -31,9 +31,7 @@ class Gateway(containers.DeclarativeContainer):
         port=Core.config.orm.port(),
         database=Core.config.orm.database())
     database_schema = DatabaseSchema(database)
-    database_mapping = DatabaseMapping(
-        goal_table=database_schema.goal,
-        goal_progression_table=database_schema.goal_progression)
+    database_mapping = DatabaseMapping(schema=database_schema)
 
 
 class Instrumentation(containers.DeclarativeContainer):
