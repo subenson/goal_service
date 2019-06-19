@@ -2,24 +2,25 @@ from sqlalchemy.orm import mapper, relationship
 
 from goal_service.domain.models.goal import Goal
 from goal_service.domain.models.progression import Progression
-from goal_service.infrastructure.orm.schema import GOAL_TABLE, \
-    GOAL_PROGRESSION_TABLE
 
-mapper(Goal, GOAL_TABLE, properties={
-    '_id': GOAL_TABLE.c.id,
-    '_name': GOAL_TABLE.c.name,
-    '_description': GOAL_TABLE.c.description,
-    '_due_date': GOAL_TABLE.c.due_date,
-    '_main_goal_id': GOAL_TABLE.c.main_goal_id,
-    '_completed': GOAL_TABLE.c.completed,
-    '_discarded': GOAL_TABLE.c.discarded,
-    'progressions': relationship(Progression),
-    'subgoals': relationship(Goal)})
 
-mapper(Progression, GOAL_PROGRESSION_TABLE, properties={
-    '_id': GOAL_PROGRESSION_TABLE.c.id,
-    '_note': GOAL_PROGRESSION_TABLE.c.note,
-    '_percentage': GOAL_PROGRESSION_TABLE.c.percentage,
-    '_goal_id': GOAL_PROGRESSION_TABLE.c.goal_id,
-    '_datetime': GOAL_PROGRESSION_TABLE.c.datetime,
-    '_discarded': GOAL_PROGRESSION_TABLE.c.discarded})
+class DatabaseMapping:
+
+    def __init__(self, goal_table, goal_progression_table):
+        mapper(Goal, goal_table, properties={
+            '_id': goal_table.c.id,
+            '_name': goal_table.c.name,
+            '_description': goal_table.c.description,
+            '_due_date': goal_table.c.due_date,
+            '_main_goal_id': goal_table.c.main_goal_id,
+            '_completed': goal_table.c.completed,
+            '_discarded': goal_table.c.discarded,
+            'progressions': relationship(Progression),
+            'subgoals': relationship(Goal)})
+        mapper(Progression, goal_progression_table, properties={
+            '_id': goal_progression_table.c.id,
+            '_note': goal_progression_table.c.note,
+            '_percentage': goal_progression_table.c.percentage,
+            '_goal_id': goal_progression_table.c.goal_id,
+            '_datetime': goal_progression_table.c.datetime,
+            '_discarded': goal_progression_table.c.discarded})

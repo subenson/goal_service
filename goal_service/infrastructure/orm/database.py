@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine, MetaData
@@ -5,7 +6,22 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 
-class SqlAlchemy:
+class ORM(metaclass=ABCMeta):
+
+    @abstractmethod
+    def __init__(self, driver, user, password, host, port, database):
+        raise NotImplementedError
+
+    @abstractmethod
+    def session(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def unit_of_work(self):
+        raise NotImplementedError
+
+
+class SqlAlchemy(ORM):
 
     def __init__(self, driver, user, password, host, port, database):
         self.engine = create_engine(

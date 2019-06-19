@@ -7,5 +7,5 @@ __pycache__
 *.egg-info
 *.ini
 *.yaml
-!example.environment.yaml
-!example.common.yaml
+!goal_service/infrastructure/config/example.*.yaml
+!goal_service/infrastructure/config/common.yaml
